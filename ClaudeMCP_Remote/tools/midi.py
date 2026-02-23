@@ -3,8 +3,7 @@ MIDI note operations, note selection, and CC/program change.
 """
 
 
-class MidiMixin(object):
-
+class MidiMixin:
     # ========================================================================
     # MIDI NOTE OPERATIONS
     # ========================================================================
@@ -43,10 +42,10 @@ class MidiMixin(object):
 
             # Add notes
             for note in notes:
-                pitch = int(note.get('pitch', 60))
-                start = float(note.get('start', 0.0))
-                duration = float(note.get('duration', 1.0))
-                velocity = int(note.get('velocity', 100))
+                pitch = int(note.get("pitch", 60))
+                start = float(note.get("start", 0.0))
+                duration = float(note.get("duration", 1.0))
+                velocity = int(note.get("velocity", 100))
 
                 # Validate parameters
                 if pitch < 0 or pitch > 127:
@@ -64,7 +63,7 @@ class MidiMixin(object):
                 "message": "Notes added",
                 "track_index": track_index,
                 "scene_index": scene_index,
-                "note_count": len(notes)
+                "note_count": len(notes),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -101,25 +100,29 @@ class MidiMixin(object):
 
             notes = []
             for note_tuple in notes_data:
-                notes.append({
-                    "pitch": note_tuple[0],
-                    "start_time": float(note_tuple[1]),
-                    "duration": float(note_tuple[2]),
-                    "velocity": note_tuple[3],
-                    "muted": note_tuple[4]
-                })
+                notes.append(
+                    {
+                        "pitch": note_tuple[0],
+                        "start_time": float(note_tuple[1]),
+                        "duration": float(note_tuple[2]),
+                        "velocity": note_tuple[3],
+                        "muted": note_tuple[4],
+                    }
+                )
 
             return {
                 "ok": True,
                 "track_index": track_index,
                 "clip_index": clip_index,
                 "notes": notes,
-                "count": len(notes)
+                "count": len(notes),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
-    def remove_notes(self, track_index, clip_index, pitch_from=0, pitch_to=127, time_from=0.0, time_to=999.0):
+    def remove_notes(
+        self, track_index, clip_index, pitch_from=0, pitch_to=127, time_from=0.0, time_to=999.0
+    ):
         """Remove MIDI notes from clip"""
         try:
             if track_index < 0 or track_index >= len(self.song.tracks):
@@ -134,7 +137,12 @@ class MidiMixin(object):
                 return {"ok": False, "error": "No MIDI clip in slot"}
 
             clip = clip_slot.clip
-            clip.remove_notes(float(time_from), int(pitch_from), float(time_to - time_from), int(pitch_to - pitch_from))
+            clip.remove_notes(
+                float(time_from),
+                int(pitch_from),
+                float(time_to - time_from),
+                int(pitch_to - pitch_from),
+            )
             return {"ok": True, "message": "Notes removed"}
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -202,11 +210,11 @@ class MidiMixin(object):
             # Convert notes to tuple format
             note_tuples = []
             for note in notes:
-                pitch = int(note.get('pitch', 60))
-                start = float(note.get('start', 0.0))
-                duration = float(note.get('duration', 1.0))
-                velocity = int(note.get('velocity', 100))
-                muted = bool(note.get('muted', False))
+                pitch = int(note.get("pitch", 60))
+                start = float(note.get("start", 0.0))
+                duration = float(note.get("duration", 1.0))
+                velocity = int(note.get("velocity", 100))
+                muted = bool(note.get("muted", False))
                 note_tuples.append((pitch, start, duration, velocity, muted))
 
             clip.replace_selected_notes(tuple(note_tuples))
@@ -214,7 +222,9 @@ class MidiMixin(object):
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
-    def get_notes_extended(self, track_index, clip_index, start_time, time_span, start_pitch, pitch_span):
+    def get_notes_extended(
+        self, track_index, clip_index, start_time, time_span, start_pitch, pitch_span
+    ):
         """Get notes with extended filtering options"""
         try:
             if track_index < 0 or track_index >= len(self.song.tracks):
@@ -233,18 +243,20 @@ class MidiMixin(object):
                 from_time=float(start_time),
                 from_pitch=int(start_pitch),
                 time_span=float(time_span),
-                pitch_span=int(pitch_span)
+                pitch_span=int(pitch_span),
             )
 
             notes = []
             for note_tuple in notes_data:
-                notes.append({
-                    "pitch": note_tuple[0],
-                    "start_time": float(note_tuple[1]),
-                    "duration": float(note_tuple[2]),
-                    "velocity": note_tuple[3],
-                    "muted": note_tuple[4]
-                })
+                notes.append(
+                    {
+                        "pitch": note_tuple[0],
+                        "start_time": float(note_tuple[1]),
+                        "duration": float(note_tuple[2]),
+                        "velocity": note_tuple[3],
+                        "muted": note_tuple[4],
+                    }
+                )
 
             return {"ok": True, "notes": notes, "count": len(notes)}
         except Exception as e:
@@ -263,14 +275,14 @@ class MidiMixin(object):
             midi_bytes = (int(status_byte), int(cc_number), int(cc_value))
 
             # Send MIDI via song.send_midi
-            if hasattr(self.song, 'send_midi'):
+            if hasattr(self.song, "send_midi"):
                 self.song.send_midi(midi_bytes)
                 return {
                     "ok": True,
                     "cc_number": int(cc_number),
                     "cc_value": int(cc_value),
                     "channel": int(channel),
-                    "message": "MIDI CC sent"
+                    "message": "MIDI CC sent",
                 }
             else:
                 return {"ok": False, "error": "send_midi not available"}
@@ -286,13 +298,13 @@ class MidiMixin(object):
             midi_bytes = (int(status_byte), int(program_number))
 
             # Send MIDI via song.send_midi
-            if hasattr(self.song, 'send_midi'):
+            if hasattr(self.song, "send_midi"):
                 self.song.send_midi(midi_bytes)
                 return {
                     "ok": True,
                     "program_number": int(program_number),
                     "channel": int(channel),
-                    "message": "MIDI Program Change sent"
+                    "message": "MIDI Program Change sent",
                 }
             else:
                 return {"ok": False, "error": "send_midi not available"}

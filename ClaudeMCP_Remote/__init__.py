@@ -7,13 +7,15 @@ Author: Claude Code
 License: MIT
 """
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 
-import Live
+import json
 import socket
 import threading
-import json
 import traceback
+
+import Live
+
 try:
     import Queue as queue  # Python 2
 except ImportError:
@@ -71,7 +73,7 @@ class ClaudeMCP:
             self.running = True
             self.socket_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            self.socket_server.bind(('127.0.0.1', 9004))
+            self.socket_server.bind(("127.0.0.1", 9004))
             self.socket_server.listen(5)
 
             # Start listening thread
@@ -93,9 +95,7 @@ class ClaudeMCP:
 
                 # Spawn a new thread for each client
                 client_thread = threading.Thread(
-                    target=self._handle_client,
-                    args=(client_socket,),
-                    daemon=True
+                    target=self._handle_client, args=(client_socket,), daemon=True
                 )
                 client_thread.start()
 
@@ -126,12 +126,12 @@ class ClaudeMCP:
                         break
 
                     # Decode data
-                    decoded = data.decode('utf-8')
+                    decoded = data.decode("utf-8")
                     buffer += decoded
 
                     # Process complete messages (terminated by newline)
-                    while '\n' in buffer:
-                        message, buffer = buffer.split('\n', 1)
+                    while "\n" in buffer:
+                        message, buffer = buffer.split("\n", 1)
                         message = message.strip()
 
                         if message:
@@ -155,7 +155,7 @@ class ClaudeMCP:
                                 except queue.Empty:
                                     response = {
                                         "ok": False,
-                                        "error": "Command processing timeout - main thread may be busy"
+                                        "error": "Command processing timeout - main thread may be busy",
                                     }
 
                                 # Clean up response queue
@@ -164,14 +164,16 @@ class ClaudeMCP:
                                         del self.response_queues[request_id]
 
                                 # Send response back to client
-                                response_str = json.dumps(response) + '\n'
-                                client_socket.sendall(response_str.encode('utf-8'))
+                                response_str = json.dumps(response) + "\n"
+                                client_socket.sendall(response_str.encode("utf-8"))
 
                             except Exception as e:
                                 error_resp = {"ok": False, "error": str(e)}
                                 try:
-                                    client_socket.sendall((json.dumps(error_resp) + '\n').encode('utf-8'))
-                                except:
+                                    client_socket.sendall(
+                                        (json.dumps(error_resp) + "\n").encode("utf-8")
+                                    )
+                                except Exception:
                                     pass
 
                 except socket.timeout:
@@ -185,7 +187,7 @@ class ClaudeMCP:
         finally:
             try:
                 client_socket.close()
-            except:
+            except Exception:
                 pass
 
     def _process_command(self, command):
@@ -197,19 +199,24 @@ class ClaudeMCP:
         on self.tools, and all remaining command keys are passed as **kwargs.
         """
         try:
-            action = command.get('action', '')
+            action = command.get("action", "")
 
-            if action == 'ping':
-                return {"ok": True, "message": "pong (queue-based, thread-safe)", "script": "ClaudeMCP_Remote", "version": __version__}
+            if action == "ping":
+                return {
+                    "ok": True,
+                    "message": "pong (queue-based, thread-safe)",
+                    "script": "ClaudeMCP_Remote",
+                    "version": __version__,
+                }
 
-            if action == 'health_check':
+            if action == "health_check":
                 return {
                     "ok": True,
                     "message": "ClaudeMCP Remote Script running (thread-safe)",
                     "version": __version__,
                     "tool_count": len(self.tools.get_available_tools()),
                     "ableton_version": str(Live.Application.get_application().get_major_version()),
-                    "queue_size": self.command_queue.qsize()
+                    "queue_size": self.command_queue.qsize(),
                 }
 
             method = getattr(self.tools, action, None)
@@ -217,23 +224,19 @@ class ClaudeMCP:
                 return {
                     "ok": False,
                     "error": "Unknown action: " + action,
-                    "available_actions": self.tools.get_available_tools()
+                    "available_actions": self.tools.get_available_tools(),
                 }
 
             params = {}
             for k, v in command.items():
-                if k != 'action':
+                if k != "action":
                     params[k] = v
             return method(**params)
 
         except Exception as e:
             self.log("ERROR processing command: " + str(e))
             self.log(traceback.format_exc())
-            return {
-                "ok": False,
-                "error": str(e),
-                "traceback": traceback.format_exc()
-            }
+            return {"ok": False, "error": str(e), "traceback": traceback.format_exc()}
 
     def update_display(self):
         """
@@ -305,7 +308,7 @@ class ClaudeMCP:
         if self.socket_server:
             try:
                 self.socket_server.close()
-            except:
+            except Exception:
                 pass
 
         self.log("ClaudeMCP Remote Script stopped")

@@ -3,7 +3,7 @@ Base mixin providing shared state and helpers for all LiveAPI tool mixins.
 """
 
 
-class BaseMixin(object):
+class BaseMixin:
     """
     Provides __init__ and logging used by all other mixins.
     Must appear first in the MRO so self.song and self.c_instance

@@ -3,8 +3,7 @@ Clip operations, extras, color, annotations, fades, RAM mode, and follow actions
 """
 
 
-class ClipsMixin(object):
-
+class ClipsMixin:
     # ========================================================================
     # CLIP OPERATIONS
     # ========================================================================
@@ -41,7 +40,7 @@ class ClipsMixin(object):
                 "message": "MIDI clip created",
                 "track_index": track_index,
                 "scene_index": scene_index,
-                "length": float(length)
+                "length": float(length),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -139,7 +138,7 @@ class ClipsMixin(object):
                 "is_audio_clip": clip.is_audio_clip,
                 "is_playing": clip.is_playing,
                 "muted": clip.muted,
-                "color": clip.color if hasattr(clip, 'color') else None
+                "color": clip.color if hasattr(clip, "color") else None,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -300,7 +299,7 @@ class ClipsMixin(object):
                 return {"ok": False, "error": "No clip in slot"}
 
             clip = clip_slot.clip
-            if hasattr(clip, 'gain'):
+            if hasattr(clip, "gain"):
                 clip.gain = float(gain)
                 return {"ok": True, "gain": float(clip.gain)}
             else:
@@ -323,7 +322,7 @@ class ClipsMixin(object):
                 return {"ok": False, "error": "No clip in slot"}
 
             clip = clip_slot.clip
-            if hasattr(clip, 'pitch_coarse'):
+            if hasattr(clip, "pitch_coarse"):
                 clip.pitch_coarse = int(semitones)
                 return {"ok": True, "pitch_coarse": clip.pitch_coarse}
             else:
@@ -346,7 +345,7 @@ class ClipsMixin(object):
                 return {"ok": False, "error": "No clip in slot"}
 
             clip = clip_slot.clip
-            if hasattr(clip, 'pitch_fine'):
+            if hasattr(clip, "pitch_fine"):
                 clip.pitch_fine = int(cents)
                 return {"ok": True, "pitch_fine": clip.pitch_fine}
             else:
@@ -396,21 +395,21 @@ class ClipsMixin(object):
             clip = clip_slot.clip
 
             # Set color if available
-            if hasattr(clip, 'color_index'):
+            if hasattr(clip, "color_index"):
                 clip.color_index = int(color_index)
                 return {
                     "ok": True,
                     "track_index": track_index,
                     "clip_index": clip_index,
-                    "color_index": int(color_index)
+                    "color_index": int(color_index),
                 }
-            elif hasattr(clip, 'color'):
+            elif hasattr(clip, "color"):
                 clip.color = int(color_index)
                 return {
                     "ok": True,
                     "track_index": track_index,
                     "clip_index": clip_index,
-                    "color": int(color_index)
+                    "color": int(color_index),
                 }
             else:
                 return {"ok": False, "error": "Clip color not available in this Ableton version"}
@@ -432,11 +431,8 @@ class ClipsMixin(object):
 
             clip = clip_slot.clip
 
-            if hasattr(clip, 'annotation'):
-                return {
-                    "ok": True,
-                    "annotation": str(clip.annotation)
-                }
+            if hasattr(clip, "annotation"):
+                return {"ok": True, "annotation": str(clip.annotation)}
             else:
                 return {"ok": False, "error": "Clip annotation not available"}
         except Exception as e:
@@ -453,12 +449,9 @@ class ClipsMixin(object):
 
             clip = clip_slot.clip
 
-            if hasattr(clip, 'annotation'):
+            if hasattr(clip, "annotation"):
                 clip.annotation = str(annotation_text)
-                return {
-                    "ok": True,
-                    "annotation": str(clip.annotation)
-                }
+                return {"ok": True, "annotation": str(clip.annotation)}
             else:
                 return {"ok": False, "error": "Clip annotation not available"}
         except Exception as e:
@@ -479,11 +472,8 @@ class ClipsMixin(object):
 
             clip = clip_slot.clip
 
-            if hasattr(clip, 'fade_in_time'):
-                return {
-                    "ok": True,
-                    "fade_in_time": float(clip.fade_in_time)
-                }
+            if hasattr(clip, "fade_in_time"):
+                return {"ok": True, "fade_in_time": float(clip.fade_in_time)}
             else:
                 return {"ok": False, "error": "Fade in not available (audio clips only)"}
         except Exception as e:
@@ -500,12 +490,9 @@ class ClipsMixin(object):
 
             clip = clip_slot.clip
 
-            if hasattr(clip, 'fade_in_time'):
+            if hasattr(clip, "fade_in_time"):
                 clip.fade_in_time = float(fade_time)
-                return {
-                    "ok": True,
-                    "fade_in_time": float(clip.fade_in_time)
-                }
+                return {"ok": True, "fade_in_time": float(clip.fade_in_time)}
             else:
                 return {"ok": False, "error": "Fade in not available (audio clips only)"}
         except Exception as e:
@@ -522,11 +509,8 @@ class ClipsMixin(object):
 
             clip = clip_slot.clip
 
-            if hasattr(clip, 'fade_out_time'):
-                return {
-                    "ok": True,
-                    "fade_out_time": float(clip.fade_out_time)
-                }
+            if hasattr(clip, "fade_out_time"):
+                return {"ok": True, "fade_out_time": float(clip.fade_out_time)}
             else:
                 return {"ok": False, "error": "Fade out not available (audio clips only)"}
         except Exception as e:
@@ -543,12 +527,9 @@ class ClipsMixin(object):
 
             clip = clip_slot.clip
 
-            if hasattr(clip, 'fade_out_time'):
+            if hasattr(clip, "fade_out_time"):
                 clip.fade_out_time = float(fade_time)
-                return {
-                    "ok": True,
-                    "fade_out_time": float(clip.fade_out_time)
-                }
+                return {"ok": True, "fade_out_time": float(clip.fade_out_time)}
             else:
                 return {"ok": False, "error": "Fade out not available (audio clips only)"}
         except Exception as e:
@@ -569,11 +550,8 @@ class ClipsMixin(object):
 
             clip = clip_slot.clip
 
-            if hasattr(clip, 'ram_mode'):
-                return {
-                    "ok": True,
-                    "ram_mode": bool(clip.ram_mode)
-                }
+            if hasattr(clip, "ram_mode"):
+                return {"ok": True, "ram_mode": bool(clip.ram_mode)}
             else:
                 return {"ok": False, "error": "RAM mode not available (audio clips only)"}
         except Exception as e:
@@ -590,12 +568,9 @@ class ClipsMixin(object):
 
             clip = clip_slot.clip
 
-            if hasattr(clip, 'ram_mode'):
+            if hasattr(clip, "ram_mode"):
                 clip.ram_mode = bool(ram_mode)
-                return {
-                    "ok": True,
-                    "ram_mode": bool(clip.ram_mode)
-                }
+                return {"ok": True, "ram_mode": bool(clip.ram_mode)}
             else:
                 return {"ok": False, "error": "RAM mode not available (audio clips only)"}
         except Exception as e:
@@ -630,30 +605,30 @@ class ClipsMixin(object):
                 5: "Last",
                 6: "Any",
                 7: "Other",
-                8: "Jump"
+                8: "Jump",
             }
 
-            result = {
-                "ok": True,
-                "track_index": track_index,
-                "clip_index": clip_index
-            }
+            result = {"ok": True, "track_index": track_index, "clip_index": clip_index}
 
-            if hasattr(clip, 'follow_action_A'):
+            if hasattr(clip, "follow_action_A"):
                 result["follow_action_A"] = int(clip.follow_action_A)
-                result["follow_action_A_name"] = action_names.get(int(clip.follow_action_A), "Unknown")
+                result["follow_action_A_name"] = action_names.get(
+                    int(clip.follow_action_A), "Unknown"
+                )
 
-            if hasattr(clip, 'follow_action_B'):
+            if hasattr(clip, "follow_action_B"):
                 result["follow_action_B"] = int(clip.follow_action_B)
-                result["follow_action_B_name"] = action_names.get(int(clip.follow_action_B), "Unknown")
+                result["follow_action_B_name"] = action_names.get(
+                    int(clip.follow_action_B), "Unknown"
+                )
 
-            if hasattr(clip, 'follow_action_time'):
+            if hasattr(clip, "follow_action_time"):
                 result["follow_action_time"] = float(clip.follow_action_time)
 
-            if hasattr(clip, 'follow_action_chance_A'):
+            if hasattr(clip, "follow_action_chance_A"):
                 result["follow_action_chance_A"] = float(clip.follow_action_chance_A)
 
-            if hasattr(clip, 'follow_action_chance_B'):
+            if hasattr(clip, "follow_action_chance_B"):
                 result["follow_action_chance_B"] = float(clip.follow_action_chance_B)
 
             return result
@@ -676,24 +651,28 @@ class ClipsMixin(object):
 
             clip = clip_slot.clip
 
-            if hasattr(clip, 'follow_action_A'):
+            if hasattr(clip, "follow_action_A"):
                 clip.follow_action_A = int(max(0, min(8, action_A)))
 
-            if hasattr(clip, 'follow_action_B'):
+            if hasattr(clip, "follow_action_B"):
                 clip.follow_action_B = int(max(0, min(8, action_B)))
 
-            if hasattr(clip, 'follow_action_chance_A'):
+            if hasattr(clip, "follow_action_chance_A"):
                 clip.follow_action_chance_A = float(max(0.0, min(1.0, chance_A)))
 
-            if hasattr(clip, 'follow_action_chance_B'):
+            if hasattr(clip, "follow_action_chance_B"):
                 clip.follow_action_chance_B = 1.0 - float(max(0.0, min(1.0, chance_A)))
 
             return {
                 "ok": True,
                 "track_index": track_index,
                 "clip_index": clip_index,
-                "follow_action_A": int(clip.follow_action_A) if hasattr(clip, 'follow_action_A') else None,
-                "follow_action_B": int(clip.follow_action_B) if hasattr(clip, 'follow_action_B') else None
+                "follow_action_A": int(clip.follow_action_A)
+                if hasattr(clip, "follow_action_A")
+                else None,
+                "follow_action_B": int(clip.follow_action_B)
+                if hasattr(clip, "follow_action_B")
+                else None,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -714,12 +693,9 @@ class ClipsMixin(object):
 
             clip = clip_slot.clip
 
-            if hasattr(clip, 'follow_action_time'):
+            if hasattr(clip, "follow_action_time"):
                 clip.follow_action_time = float(max(0.0, time_in_bars))
-                return {
-                    "ok": True,
-                    "follow_action_time": float(clip.follow_action_time)
-                }
+                return {"ok": True, "follow_action_time": float(clip.follow_action_time)}
             else:
                 return {"ok": False, "error": "Follow action time not available"}
         except Exception as e:

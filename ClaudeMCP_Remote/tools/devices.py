@@ -3,8 +3,7 @@ Device operations, parameters, racks/chains, plugin windows, and utilities.
 """
 
 
-class DevicesMixin(object):
-
+class DevicesMixin:
     # ========================================================================
     # DEVICE OPERATIONS
     # ========================================================================
@@ -19,7 +18,7 @@ class DevicesMixin(object):
             return {
                 "ok": True,
                 "message": "Device add requested (browser API required for full implementation)",
-                "device_name": device_name
+                "device_name": device_name,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -34,18 +33,20 @@ class DevicesMixin(object):
             devices = []
 
             for device in track.devices:
-                devices.append({
-                    "name": str(device.name),
-                    "class_name": str(device.class_name),
-                    "is_active": device.is_active,
-                    "num_parameters": len(device.parameters)
-                })
+                devices.append(
+                    {
+                        "name": str(device.name),
+                        "class_name": str(device.class_name),
+                        "is_active": device.is_active,
+                        "num_parameters": len(device.parameters),
+                    }
+                )
 
             return {
                 "ok": True,
                 "track_index": track_index,
                 "devices": devices,
-                "count": len(devices)
+                "count": len(devices),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -67,11 +68,7 @@ class DevicesMixin(object):
             param = device.parameters[param_index]
             param.value = float(value)
 
-            return {
-                "ok": True,
-                "message": "Parameter set",
-                "value": float(param.value)
-            }
+            return {"ok": True, "message": "Parameter set", "value": float(param.value)}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -90,7 +87,7 @@ class DevicesMixin(object):
                 return {"ok": False, "error": "Invalid device index"}
 
             device = track.devices[device_index]
-            if hasattr(device, 'is_active'):
+            if hasattr(device, "is_active"):
                 device.is_active = bool(enabled)
                 return {"ok": True, "is_active": device.is_active}
             else:
@@ -112,22 +109,24 @@ class DevicesMixin(object):
             parameters = []
 
             for i, param in enumerate(device.parameters):
-                parameters.append({
-                    "index": i,
-                    "name": str(param.name),
-                    "value": float(param.value),
-                    "min": float(param.min),
-                    "max": float(param.max),
-                    "is_quantized": param.is_quantized,
-                    "is_enabled": param.is_enabled if hasattr(param, 'is_enabled') else True
-                })
+                parameters.append(
+                    {
+                        "index": i,
+                        "name": str(param.name),
+                        "value": float(param.value),
+                        "min": float(param.min),
+                        "max": float(param.max),
+                        "is_quantized": param.is_quantized,
+                        "is_enabled": param.is_enabled if hasattr(param, "is_enabled") else True,
+                    }
+                )
 
             return {
                 "ok": True,
                 "track_index": track_index,
                 "device_index": device_index,
                 "parameters": parameters,
-                "count": len(parameters)
+                "count": len(parameters),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -152,7 +151,7 @@ class DevicesMixin(object):
                         "name": str(param.name),
                         "value": float(param.value),
                         "min": float(param.min),
-                        "max": float(param.max)
+                        "max": float(param.max),
                     }
 
             return {"ok": False, "error": "Parameter '" + str(param_name) + "' not found"}
@@ -174,11 +173,7 @@ class DevicesMixin(object):
             for param in device.parameters:
                 if str(param.name) == param_name:
                     param.value = float(value)
-                    return {
-                        "ok": True,
-                        "name": str(param.name),
-                        "value": float(param.value)
-                    }
+                    return {"ok": True, "name": str(param.name), "value": float(param.value)}
 
             return {"ok": False, "error": "Parameter '" + str(param_name) + "' not found"}
         except Exception as e:
@@ -213,7 +208,7 @@ class DevicesMixin(object):
             return {
                 "ok": True,
                 "message": "Device preset browsing requires browser API",
-                "device_index": device_index
+                "device_index": device_index,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -232,7 +227,7 @@ class DevicesMixin(object):
             return {
                 "ok": True,
                 "message": "Device preset loading requires browser API",
-                "preset_index": preset_index
+                "preset_index": preset_index,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -248,6 +243,7 @@ class DevicesMixin(object):
                 return {"ok": False, "error": "Invalid device index"}
 
             import random
+
             device = track.devices[device_index]
             randomized_count = 0
 
@@ -260,7 +256,7 @@ class DevicesMixin(object):
             return {
                 "ok": True,
                 "message": "Device parameters randomized",
-                "randomized_count": randomized_count
+                "randomized_count": randomized_count,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -286,12 +282,13 @@ class DevicesMixin(object):
             # Randomizing all parameters (excluding read-only ones)
             randomized_count = 0
             for param in device.parameters:
-                if hasattr(param, 'is_enabled') and param.is_enabled and not param.is_quantized:
+                if hasattr(param, "is_enabled") and param.is_enabled and not param.is_quantized:
                     try:
                         import random
+
                         param.value = random.uniform(float(param.min), float(param.max))
                         randomized_count += 1
-                    except:
+                    except Exception:
                         pass
 
             return {
@@ -299,7 +296,7 @@ class DevicesMixin(object):
                 "track_index": track_index,
                 "device_index": device_index,
                 "device_name": str(device.name),
-                "randomized_parameters": randomized_count
+                "randomized_parameters": randomized_count,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -320,24 +317,22 @@ class DevicesMixin(object):
 
             device = track.devices[device_index]
 
-            if not hasattr(device, 'chains'):
+            if not hasattr(device, "chains"):
                 return {"ok": False, "error": "Device does not have chains (not a rack)"}
 
             chains = []
             for i, chain in enumerate(device.chains):
-                chains.append({
-                    "index": i,
-                    "name": str(chain.name),
-                    "mute": chain.mute if hasattr(chain, 'mute') else False,
-                    "solo": chain.solo if hasattr(chain, 'solo') else False,
-                    "num_devices": len(chain.devices) if hasattr(chain, 'devices') else 0
-                })
+                chains.append(
+                    {
+                        "index": i,
+                        "name": str(chain.name),
+                        "mute": chain.mute if hasattr(chain, "mute") else False,
+                        "solo": chain.solo if hasattr(chain, "solo") else False,
+                        "num_devices": len(chain.devices) if hasattr(chain, "devices") else 0,
+                    }
+                )
 
-            return {
-                "ok": True,
-                "chains": chains,
-                "count": len(chains)
-            }
+            return {"ok": True, "chains": chains, "count": len(chains)}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -353,7 +348,7 @@ class DevicesMixin(object):
 
             device = track.devices[device_index]
 
-            if not hasattr(device, 'chains'):
+            if not hasattr(device, "chains"):
                 return {"ok": False, "error": "Device does not have chains"}
 
             if chain_index < 0 or chain_index >= len(device.chains):
@@ -362,19 +357,21 @@ class DevicesMixin(object):
             chain = device.chains[chain_index]
             chain_devices = []
 
-            if hasattr(chain, 'devices'):
+            if hasattr(chain, "devices"):
                 for dev in chain.devices:
-                    chain_devices.append({
-                        "name": str(dev.name),
-                        "class_name": str(dev.class_name),
-                        "is_active": dev.is_active
-                    })
+                    chain_devices.append(
+                        {
+                            "name": str(dev.name),
+                            "class_name": str(dev.class_name),
+                            "is_active": dev.is_active,
+                        }
+                    )
 
             return {
                 "ok": True,
                 "chain_index": chain_index,
                 "devices": chain_devices,
-                "count": len(chain_devices)
+                "count": len(chain_devices),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -391,7 +388,7 @@ class DevicesMixin(object):
 
             device = track.devices[device_index]
 
-            if not hasattr(device, 'chains'):
+            if not hasattr(device, "chains"):
                 return {"ok": False, "error": "Device does not have chains"}
 
             if chain_index < 0 or chain_index >= len(device.chains):
@@ -399,13 +396,9 @@ class DevicesMixin(object):
 
             chain = device.chains[chain_index]
 
-            if hasattr(chain, 'mute'):
+            if hasattr(chain, "mute"):
                 chain.mute = bool(mute)
-                return {
-                    "ok": True,
-                    "chain_index": chain_index,
-                    "mute": chain.mute
-                }
+                return {"ok": True, "chain_index": chain_index, "mute": chain.mute}
             else:
                 return {"ok": False, "error": "Chain mute not available"}
         except Exception as e:
@@ -423,7 +416,7 @@ class DevicesMixin(object):
 
             device = track.devices[device_index]
 
-            if not hasattr(device, 'chains'):
+            if not hasattr(device, "chains"):
                 return {"ok": False, "error": "Device does not have chains"}
 
             if chain_index < 0 or chain_index >= len(device.chains):
@@ -431,13 +424,9 @@ class DevicesMixin(object):
 
             chain = device.chains[chain_index]
 
-            if hasattr(chain, 'solo'):
+            if hasattr(chain, "solo"):
                 chain.solo = bool(solo)
-                return {
-                    "ok": True,
-                    "chain_index": chain_index,
-                    "solo": chain.solo
-                }
+                return {"ok": True, "chain_index": chain_index, "solo": chain.solo}
             else:
                 return {"ok": False, "error": "Chain solo not available"}
         except Exception as e:
@@ -456,11 +445,7 @@ class DevicesMixin(object):
             # Use the appointed device to show in Live's interface
             self.c_instance.song().view.select_device(device)
 
-            return {
-                "ok": True,
-                "message": "Plugin window shown",
-                "device_name": str(device.name)
-            }
+            return {"ok": True, "message": "Plugin window shown", "device_name": str(device.name)}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -469,10 +454,7 @@ class DevicesMixin(object):
         try:
             # Hiding is done by selecting something else
             # This is a simplified version
-            return {
-                "ok": True,
-                "message": "Plugin window hidden"
-            }
+            return {"ok": True, "message": "Plugin window hidden"}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -486,11 +468,8 @@ class DevicesMixin(object):
             track = self.song.tracks[track_index]
             device = track.devices[device_index]
 
-            if hasattr(device, 'class_name'):
-                return {
-                    "ok": True,
-                    "class_name": str(device.class_name)
-                }
+            if hasattr(device, "class_name"):
+                return {"ok": True, "class_name": str(device.class_name)}
             else:
                 return {"ok": False, "error": "Class name not available"}
         except Exception as e:
@@ -502,11 +481,8 @@ class DevicesMixin(object):
             track = self.song.tracks[track_index]
             device = track.devices[device_index]
 
-            if hasattr(device, 'type'):
-                return {
-                    "ok": True,
-                    "type": int(device.type)
-                }
+            if hasattr(device, "type"):
+                return {"ok": True, "type": int(device.type)}
             else:
                 return {"ok": False, "error": "Device type not available"}
         except Exception as e:
@@ -523,12 +499,12 @@ class DevicesMixin(object):
             device = track.devices[device_index]
             param = device.parameters[param_index]
 
-            if hasattr(param, 'display_value'):
+            if hasattr(param, "display_value"):
                 return {
                     "ok": True,
                     "display_value": str(param.display_value),
                     "raw_value": float(param.value),
-                    "name": str(param.name)
+                    "name": str(param.name),
                 }
             else:
                 # Fallback to string representation
@@ -536,7 +512,7 @@ class DevicesMixin(object):
                     "ok": True,
                     "display_value": str(param.__str__()),
                     "raw_value": float(param.value),
-                    "name": str(param.name)
+                    "name": str(param.name),
                 }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -549,13 +525,9 @@ class DevicesMixin(object):
 
             params_info = []
             for i, param in enumerate(device.parameters):
-                param_data = {
-                    "index": i,
-                    "name": str(param.name),
-                    "raw_value": float(param.value)
-                }
+                param_data = {"index": i, "name": str(param.name), "raw_value": float(param.value)}
 
-                if hasattr(param, 'display_value'):
+                if hasattr(param, "display_value"):
                     param_data["display_value"] = str(param.display_value)
                 else:
                     param_data["display_value"] = str(param.__str__())
@@ -566,7 +538,7 @@ class DevicesMixin(object):
                 "ok": True,
                 "device_name": str(device.name),
                 "count": len(params_info),
-                "parameters": params_info
+                "parameters": params_info,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}

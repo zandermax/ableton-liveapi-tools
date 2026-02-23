@@ -4,8 +4,7 @@ and miscellaneous track/clip/scene property operations.
 """
 
 
-class M4LAndLive12Mixin(object):
-
+class M4LAndLive12Mixin:
     # ========================================================================
     # MAX FOR LIVE (M4L) DEVICE OPERATIONS
     # ========================================================================
@@ -23,15 +22,17 @@ class M4LAndLive12Mixin(object):
             device = track.devices[device_index]
 
             # M4L devices have specific class names
-            m4l_classes = ['MxDeviceAudioEffect', 'MxDeviceMidiEffect', 'MxDeviceInstrument']
+            m4l_classes = ["MxDeviceAudioEffect", "MxDeviceMidiEffect", "MxDeviceInstrument"]
             is_m4l = device.class_name in m4l_classes
 
             return {
                 "ok": True,
                 "is_m4l": is_m4l,
                 "class_name": str(device.class_name),
-                "class_display_name": str(device.class_display_name) if hasattr(device, 'class_display_name') else str(device.class_name),
-                "device_name": str(device.name)
+                "class_display_name": str(device.class_display_name)
+                if hasattr(device, "class_display_name")
+                else str(device.class_name),
+                "device_name": str(device.name),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -44,26 +45,28 @@ class M4LAndLive12Mixin(object):
 
             track = self.song.tracks[track_index]
             m4l_devices = []
-            m4l_classes = ['MxDeviceAudioEffect', 'MxDeviceMidiEffect', 'MxDeviceInstrument']
+            m4l_classes = ["MxDeviceAudioEffect", "MxDeviceMidiEffect", "MxDeviceInstrument"]
 
             for i, device in enumerate(track.devices):
                 if device.class_name in m4l_classes:
                     device_type = self._get_m4l_type(device.class_name)
-                    m4l_devices.append({
-                        "index": i,
-                        "name": str(device.name),
-                        "class_name": str(device.class_name),
-                        "type": device_type,
-                        "is_active": device.is_active,
-                        "num_parameters": len(device.parameters)
-                    })
+                    m4l_devices.append(
+                        {
+                            "index": i,
+                            "name": str(device.name),
+                            "class_name": str(device.class_name),
+                            "type": device_type,
+                            "is_active": device.is_active,
+                            "num_parameters": len(device.parameters),
+                        }
+                    )
 
             return {
                 "ok": True,
                 "track_index": track_index,
                 "track_name": str(track.name),
                 "devices": m4l_devices,
-                "count": len(m4l_devices)
+                "count": len(m4l_devices),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -71,11 +74,11 @@ class M4LAndLive12Mixin(object):
     def _get_m4l_type(self, class_name):
         """Get M4L device type from class name"""
         type_map = {
-            'MxDeviceAudioEffect': 'audio_effect',
-            'MxDeviceMidiEffect': 'midi_effect',
-            'MxDeviceInstrument': 'instrument'
+            "MxDeviceAudioEffect": "audio_effect",
+            "MxDeviceMidiEffect": "midi_effect",
+            "MxDeviceInstrument": "instrument",
         }
-        return type_map.get(class_name, 'unknown')
+        return type_map.get(class_name, "unknown")
 
     def set_device_param_by_name(self, track_index, device_index, param_name, value):
         """Set device parameter by name (useful for M4L devices with custom parameter names)"""
@@ -99,10 +102,10 @@ class M4LAndLive12Mixin(object):
                         "device_index": device_index,
                         "param_name": param_name,
                         "param_index": i,
-                        "value": float(param.value)
+                        "value": float(param.value),
                     }
 
-            return {"ok": False, "error": "Parameter '{}' not found".format(param_name)}
+            return {"ok": False, "error": f"Parameter '{param_name}' not found"}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -128,10 +131,10 @@ class M4LAndLive12Mixin(object):
                         "value": float(param.value),
                         "min": float(param.min),
                         "max": float(param.max),
-                        "is_enabled": param.is_enabled if hasattr(param, 'is_enabled') else True
+                        "is_enabled": param.is_enabled if hasattr(param, "is_enabled") else True,
                     }
 
-            return {"ok": False, "error": "Parameter '{}' not found".format(param_name)}
+            return {"ok": False, "error": f"Parameter '{param_name}' not found"}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -147,21 +150,23 @@ class M4LAndLive12Mixin(object):
             for i, device in enumerate(track.devices):
                 device_name = str(device.name)
                 # Check if device name contains "CV" (common in CV Tools)
-                if 'CV' in device_name or 'cv' in device_name.lower():
-                    cv_devices.append({
-                        "index": i,
-                        "name": device_name,
-                        "class_name": str(device.class_name),
-                        "is_active": device.is_active,
-                        "num_parameters": len(device.parameters)
-                    })
+                if "CV" in device_name or "cv" in device_name.lower():
+                    cv_devices.append(
+                        {
+                            "index": i,
+                            "name": device_name,
+                            "class_name": str(device.class_name),
+                            "is_active": device.is_active,
+                            "num_parameters": len(device.parameters),
+                        }
+                    )
 
             return {
                 "ok": True,
                 "track_index": track_index,
                 "track_name": str(track.name),
                 "cv_devices": cv_devices,
-                "count": len(cv_devices)
+                "count": len(cv_devices),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -194,16 +199,16 @@ class M4LAndLive12Mixin(object):
                 2: "Texture",
                 3: "Re-Pitch",
                 4: "Complex",
-                5: "Complex Pro"
+                5: "Complex Pro",
             }
 
-            warp_mode = int(clip.warp_mode) if hasattr(clip, 'warp_mode') else 0
+            warp_mode = int(clip.warp_mode) if hasattr(clip, "warp_mode") else 0
 
             return {
                 "ok": True,
                 "warp_mode": warp_mode,
                 "warp_mode_name": warp_mode_names.get(warp_mode, "Unknown"),
-                "warping": clip.warping if hasattr(clip, 'warping') else False
+                "warping": clip.warping if hasattr(clip, "warping") else False,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -226,12 +231,9 @@ class M4LAndLive12Mixin(object):
             if not clip.is_audio_clip:
                 return {"ok": False, "error": "Clip is not an audio clip"}
 
-            if hasattr(clip, 'warp_mode'):
+            if hasattr(clip, "warp_mode"):
                 clip.warp_mode = int(max(0, min(5, warp_mode)))
-                return {
-                    "ok": True,
-                    "warp_mode": int(clip.warp_mode)
-                }
+                return {"ok": True, "warp_mode": int(clip.warp_mode)}
             else:
                 return {"ok": False, "error": "Warp mode not available"}
         except Exception as e:
@@ -256,15 +258,12 @@ class M4LAndLive12Mixin(object):
                 return {"ok": False, "error": "Clip is not an audio clip"}
 
             file_path = ""
-            if hasattr(clip, 'file_path'):
+            if hasattr(clip, "file_path"):
                 file_path = str(clip.file_path)
-            elif hasattr(clip, 'sample') and hasattr(clip.sample, 'file_path'):
+            elif hasattr(clip, "sample") and hasattr(clip.sample, "file_path"):
                 file_path = str(clip.sample.file_path)
 
-            return {
-                "ok": True,
-                "file_path": file_path
-            }
+            return {"ok": True, "file_path": file_path}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -286,12 +285,9 @@ class M4LAndLive12Mixin(object):
             if not clip.is_audio_clip:
                 return {"ok": False, "error": "Clip is not an audio clip"}
 
-            if hasattr(clip, 'warping'):
+            if hasattr(clip, "warping"):
                 clip.warping = bool(warping)
-                return {
-                    "ok": True,
-                    "warping": clip.warping
-                }
+                return {"ok": True, "warping": clip.warping}
             else:
                 return {"ok": False, "error": "Warping property not available"}
         except Exception as e:
@@ -316,18 +312,20 @@ class M4LAndLive12Mixin(object):
                 return {"ok": False, "error": "Clip is not an audio clip"}
 
             markers = []
-            if hasattr(clip, 'warp_markers'):
+            if hasattr(clip, "warp_markers"):
                 for marker in clip.warp_markers:
-                    markers.append({
-                        "sample_time": float(marker.sample_time) if hasattr(marker, 'sample_time') else 0.0,
-                        "beat_time": float(marker.beat_time) if hasattr(marker, 'beat_time') else 0.0
-                    })
+                    markers.append(
+                        {
+                            "sample_time": float(marker.sample_time)
+                            if hasattr(marker, "sample_time")
+                            else 0.0,
+                            "beat_time": float(marker.beat_time)
+                            if hasattr(marker, "beat_time")
+                            else 0.0,
+                        }
+                    )
 
-            return {
-                "ok": True,
-                "markers": markers,
-                "count": len(markers)
-            }
+            return {"ok": True, "markers": markers, "count": len(markers)}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -346,11 +344,8 @@ class M4LAndLive12Mixin(object):
 
             clip = clip_slot.clip
 
-            if hasattr(clip, 'sample_length'):
-                return {
-                    "ok": True,
-                    "sample_length": float(clip.sample_length)
-                }
+            if hasattr(clip, "sample_length"):
+                return {"ok": True, "sample_length": float(clip.sample_length)}
             else:
                 return {"ok": False, "error": "Sample length not available (audio clips only)"}
         except Exception as e:
@@ -362,11 +357,8 @@ class M4LAndLive12Mixin(object):
             track = self.song.tracks[track_index]
             device = track.devices[device_index]
 
-            if hasattr(device, 'playback_mode'):
-                return {
-                    "ok": True,
-                    "playback_mode": int(device.playback_mode)
-                }
+            if hasattr(device, "playback_mode"):
+                return {"ok": True, "playback_mode": int(device.playback_mode)}
             else:
                 return {"ok": False, "error": "Playback mode not available (Simpler/Sampler only)"}
         except Exception as e:
@@ -378,12 +370,9 @@ class M4LAndLive12Mixin(object):
             track = self.song.tracks[track_index]
             device = track.devices[device_index]
 
-            if hasattr(device, 'playback_mode'):
+            if hasattr(device, "playback_mode"):
                 device.playback_mode = int(mode)
-                return {
-                    "ok": True,
-                    "playback_mode": int(device.playback_mode)
-                }
+                return {"ok": True, "playback_mode": int(device.playback_mode)}
             else:
                 return {"ok": False, "error": "Playback mode not available (Simpler/Sampler only)"}
         except Exception as e:
@@ -398,20 +387,16 @@ class M4LAndLive12Mixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'take_lanes'):
+            if hasattr(track, "take_lanes"):
                 lanes_info = []
                 for i, lane in enumerate(track.take_lanes):
                     lane_data = {
                         "index": i,
-                        "name": str(lane.name) if hasattr(lane, 'name') else "Take " + str(i + 1)
+                        "name": str(lane.name) if hasattr(lane, "name") else "Take " + str(i + 1),
                     }
                     lanes_info.append(lane_data)
 
-                return {
-                    "ok": True,
-                    "count": len(lanes_info),
-                    "take_lanes": lanes_info
-                }
+                return {"ok": True, "count": len(lanes_info), "take_lanes": lanes_info}
             else:
                 return {"ok": False, "error": "Take lanes not available (Live 12+ only)"}
         except Exception as e:
@@ -422,15 +407,15 @@ class M4LAndLive12Mixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'create_take_lane'):
+            if hasattr(track, "create_take_lane"):
                 lane = track.create_take_lane()
-                if name and hasattr(lane, 'name'):
+                if name and hasattr(lane, "name"):
                     lane.name = str(name)
 
                 return {
                     "ok": True,
                     "message": "Take lane created",
-                    "name": str(lane.name) if hasattr(lane, 'name') else "New Take"
+                    "name": str(lane.name) if hasattr(lane, "name") else "New Take",
                 }
             else:
                 return {"ok": False, "error": "Take lanes not available (Live 12+ only)"}
@@ -442,11 +427,13 @@ class M4LAndLive12Mixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'take_lanes'):
+            if hasattr(track, "take_lanes"):
                 lane = track.take_lanes[lane_index]
                 return {
                     "ok": True,
-                    "name": str(lane.name) if hasattr(lane, 'name') else "Take " + str(lane_index + 1)
+                    "name": str(lane.name)
+                    if hasattr(lane, "name")
+                    else "Take " + str(lane_index + 1),
                 }
             else:
                 return {"ok": False, "error": "Take lanes not available (Live 12+ only)"}
@@ -458,14 +445,11 @@ class M4LAndLive12Mixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'take_lanes'):
+            if hasattr(track, "take_lanes"):
                 lane = track.take_lanes[lane_index]
-                if hasattr(lane, 'name'):
+                if hasattr(lane, "name"):
                     lane.name = str(name)
-                    return {
-                        "ok": True,
-                        "name": str(lane.name)
-                    }
+                    return {"ok": True, "name": str(lane.name)}
                 else:
                     return {"ok": False, "error": "Lane name not settable"}
             else:
@@ -478,14 +462,14 @@ class M4LAndLive12Mixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'take_lanes'):
+            if hasattr(track, "take_lanes"):
                 lane = track.take_lanes[lane_index]
-                if hasattr(lane, 'create_audio_clip'):
-                    clip = lane.create_audio_clip(float(length))
+                if hasattr(lane, "create_audio_clip"):
+                    lane.create_audio_clip(float(length))
                     return {
                         "ok": True,
                         "message": "Audio clip created in take lane",
-                        "length": float(length)
+                        "length": float(length),
                     }
                 else:
                     return {"ok": False, "error": "create_audio_clip not available"}
@@ -499,14 +483,14 @@ class M4LAndLive12Mixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'take_lanes'):
+            if hasattr(track, "take_lanes"):
                 lane = track.take_lanes[lane_index]
-                if hasattr(lane, 'create_midi_clip'):
-                    clip = lane.create_midi_clip(float(length))
+                if hasattr(lane, "create_midi_clip"):
+                    lane.create_midi_clip(float(length))
                     return {
                         "ok": True,
                         "message": "MIDI clip created in take lane",
-                        "length": float(length)
+                        "length": float(length),
                     }
                 else:
                     return {"ok": False, "error": "create_midi_clip not available"}
@@ -520,24 +504,20 @@ class M4LAndLive12Mixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'take_lanes'):
+            if hasattr(track, "take_lanes"):
                 lane = track.take_lanes[lane_index]
                 clips_info = []
 
-                if hasattr(lane, 'clips'):
+                if hasattr(lane, "clips"):
                     for clip in lane.clips:
                         clip_data = {
                             "name": str(clip.name),
                             "length": float(clip.length),
-                            "is_midi": clip.is_midi_clip
+                            "is_midi": clip.is_midi_clip,
                         }
                         clips_info.append(clip_data)
 
-                return {
-                    "ok": True,
-                    "count": len(clips_info),
-                    "clips": clips_info
-                }
+                return {"ok": True, "count": len(clips_info), "clips": clips_info}
             else:
                 return {"ok": False, "error": "Take lanes not available (Live 12+ only)"}
         except Exception as e:
@@ -548,12 +528,9 @@ class M4LAndLive12Mixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'delete_take_lane'):
+            if hasattr(track, "delete_take_lane"):
                 track.delete_take_lane(lane_index)
-                return {
-                    "ok": True,
-                    "message": "Take lane deleted"
-                }
+                return {"ok": True, "message": "Take lane deleted"}
             else:
                 return {"ok": False, "error": "Take lanes not available (Live 12+ only)"}
         except Exception as e:
@@ -567,13 +544,11 @@ class M4LAndLive12Mixin(object):
         """Get Ableton Live build identifier (Live 12+)"""
         try:
             import Live
+
             app = Live.Application.get_application()
 
-            if hasattr(app, 'get_build_id'):
-                return {
-                    "ok": True,
-                    "build_id": str(app.get_build_id())
-                }
+            if hasattr(app, "get_build_id"):
+                return {"ok": True, "build_id": str(app.get_build_id())}
             else:
                 return {"ok": False, "error": "get_build_id not available (Live 12+ only)"}
         except Exception as e:
@@ -583,13 +558,11 @@ class M4LAndLive12Mixin(object):
         """Get Ableton Live variant (Suite, Standard, Intro) (Live 12+)"""
         try:
             import Live
+
             app = Live.Application.get_application()
 
-            if hasattr(app, 'get_variant'):
-                return {
-                    "ok": True,
-                    "variant": str(app.get_variant())
-                }
+            if hasattr(app, "get_variant"):
+                return {"ok": True, "variant": str(app.get_variant())}
             else:
                 return {"ok": False, "error": "get_variant not available (Live 12+ only)"}
         except Exception as e:
@@ -599,14 +572,15 @@ class M4LAndLive12Mixin(object):
         """Show message box dialog to user (Live 12+)"""
         try:
             import Live
+
             app = Live.Application.get_application()
 
-            if hasattr(app, 'show_message'):
+            if hasattr(app, "show_message"):
                 result = app.show_message(str(message))
                 return {
                     "ok": True,
                     "message": "Message shown",
-                    "button_pressed": int(result) if result is not None else 0
+                    "button_pressed": int(result) if result is not None else 0,
                 }
             else:
                 return {"ok": False, "error": "show_message not available (Live 12+ only)"}
@@ -617,21 +591,22 @@ class M4LAndLive12Mixin(object):
         """Get full Ableton Live version information"""
         try:
             import Live
+
             app = Live.Application.get_application()
 
             version_info = {
                 "ok": True,
                 "major_version": int(app.get_major_version()),
                 "minor_version": int(app.get_minor_version()),
-                "bugfix_version": int(app.get_bugfix_version())
+                "bugfix_version": int(app.get_bugfix_version()),
             }
 
             # Add build_id if available (Live 12+)
-            if hasattr(app, 'get_build_id'):
+            if hasattr(app, "get_build_id"):
                 version_info["build_id"] = str(app.get_build_id())
 
             # Add variant if available (Live 12+)
-            if hasattr(app, 'get_variant'):
+            if hasattr(app, "get_variant"):
                 version_info["variant"] = str(app.get_variant())
 
             return version_info
@@ -653,11 +628,8 @@ class M4LAndLive12Mixin(object):
 
             clip = clip_slot.clip
 
-            if hasattr(clip, 'start_time'):
-                return {
-                    "ok": True,
-                    "start_time": float(clip.start_time)
-                }
+            if hasattr(clip, "start_time"):
+                return {"ok": True, "start_time": float(clip.start_time)}
             else:
                 return {"ok": False, "error": "start_time not available"}
         except Exception as e:
@@ -674,12 +646,9 @@ class M4LAndLive12Mixin(object):
 
             clip = clip_slot.clip
 
-            if hasattr(clip, 'start_time'):
+            if hasattr(clip, "start_time"):
                 clip.start_time = float(start_time)
-                return {
-                    "ok": True,
-                    "start_time": float(clip.start_time)
-                }
+                return {"ok": True, "start_time": float(clip.start_time)}
             else:
                 return {"ok": False, "error": "start_time not settable"}
         except Exception as e:
@@ -690,11 +659,8 @@ class M4LAndLive12Mixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'is_foldable'):
-                return {
-                    "ok": True,
-                    "is_foldable": bool(track.is_foldable)
-                }
+            if hasattr(track, "is_foldable"):
+                return {"ok": True, "is_foldable": bool(track.is_foldable)}
             else:
                 return {"ok": False, "error": "is_foldable not available"}
         except Exception as e:
@@ -705,11 +671,8 @@ class M4LAndLive12Mixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'is_frozen'):
-                return {
-                    "ok": True,
-                    "is_frozen": bool(track.is_frozen)
-                }
+            if hasattr(track, "is_frozen"):
+                return {"ok": True, "is_frozen": bool(track.is_frozen)}
             else:
                 return {"ok": False, "error": "is_frozen not available"}
         except Exception as e:
@@ -720,11 +683,8 @@ class M4LAndLive12Mixin(object):
         try:
             scene = self.song.scenes[scene_index]
 
-            if hasattr(scene, 'is_empty'):
-                return {
-                    "ok": True,
-                    "is_empty": bool(scene.is_empty)
-                }
+            if hasattr(scene, "is_empty"):
+                return {"ok": True, "is_empty": bool(scene.is_empty)}
             else:
                 # Manually check if all clip slots are empty
                 is_empty = True
@@ -733,10 +693,7 @@ class M4LAndLive12Mixin(object):
                         is_empty = False
                         break
 
-                return {
-                    "ok": True,
-                    "is_empty": is_empty
-                }
+                return {"ok": True, "is_empty": is_empty}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -745,11 +702,11 @@ class M4LAndLive12Mixin(object):
         try:
             scene = self.song.scenes[scene_index]
 
-            if hasattr(scene, 'tempo'):
+            if hasattr(scene, "tempo"):
                 return {
                     "ok": True,
                     "tempo": float(scene.tempo) if scene.tempo else None,
-                    "has_tempo": bool(scene.tempo)
+                    "has_tempo": bool(scene.tempo),
                 }
             else:
                 return {"ok": False, "error": "Scene tempo not available"}
@@ -759,11 +716,8 @@ class M4LAndLive12Mixin(object):
     def get_arrangement_overdub(self):
         """Get arrangement overdub state"""
         try:
-            if hasattr(self.song, 'arrangement_overdub'):
-                return {
-                    "ok": True,
-                    "arrangement_overdub": bool(self.song.arrangement_overdub)
-                }
+            if hasattr(self.song, "arrangement_overdub"):
+                return {"ok": True, "arrangement_overdub": bool(self.song.arrangement_overdub)}
             else:
                 return {"ok": False, "error": "arrangement_overdub not available"}
         except Exception as e:
@@ -772,12 +726,9 @@ class M4LAndLive12Mixin(object):
     def set_record_mode(self, mode):
         """Set session/arrangement record mode (0=session, 1=arrangement)"""
         try:
-            if hasattr(self.song, 'record_mode'):
+            if hasattr(self.song, "record_mode"):
                 self.song.record_mode = int(mode)
-                return {
-                    "ok": True,
-                    "record_mode": int(self.song.record_mode)
-                }
+                return {"ok": True, "record_mode": int(self.song.record_mode)}
             else:
                 return {"ok": False, "error": "record_mode not available"}
         except Exception as e:
@@ -786,11 +737,8 @@ class M4LAndLive12Mixin(object):
     def get_signature_numerator(self):
         """Get global time signature numerator"""
         try:
-            if hasattr(self.song, 'signature_numerator'):
-                return {
-                    "ok": True,
-                    "signature_numerator": int(self.song.signature_numerator)
-                }
+            if hasattr(self.song, "signature_numerator"):
+                return {"ok": True, "signature_numerator": int(self.song.signature_numerator)}
             else:
                 return {"ok": False, "error": "signature_numerator not available"}
         except Exception as e:
@@ -799,11 +747,8 @@ class M4LAndLive12Mixin(object):
     def get_signature_denominator(self):
         """Get global time signature denominator"""
         try:
-            if hasattr(self.song, 'signature_denominator'):
-                return {
-                    "ok": True,
-                    "signature_denominator": int(self.song.signature_denominator)
-                }
+            if hasattr(self.song, "signature_denominator"):
+                return {"ok": True, "signature_denominator": int(self.song.signature_denominator)}
             else:
                 return {"ok": False, "error": "signature_denominator not available"}
         except Exception as e:

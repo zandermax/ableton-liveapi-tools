@@ -3,8 +3,7 @@ Track management, routing, grouping, freeze/flatten, annotations, and delay oper
 """
 
 
-class TracksMixin(object):
-
+class TracksMixin:
     # ========================================================================
     # TRACK MANAGEMENT
     # ========================================================================
@@ -27,7 +26,7 @@ class TracksMixin(object):
                 "ok": True,
                 "message": "MIDI track created",
                 "track_index": track_index,
-                "name": str(self.song.tracks[track_index].name)
+                "name": str(self.song.tracks[track_index].name),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -50,7 +49,7 @@ class TracksMixin(object):
                 "ok": True,
                 "message": "Audio track created",
                 "track_index": track_index,
-                "name": str(self.song.tracks[track_index].name)
+                "name": str(self.song.tracks[track_index].name),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -60,11 +59,7 @@ class TracksMixin(object):
         try:
             self.song.create_return_track()
             return_index = len(self.song.return_tracks) - 1
-            return {
-                "ok": True,
-                "message": "Return track created",
-                "return_index": return_index
-            }
+            return {"ok": True, "message": "Return track created", "return_index": return_index}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -124,7 +119,7 @@ class TracksMixin(object):
                 "ok": True,
                 "message": "Track volume set",
                 "track_index": track_index,
-                "volume": float(track.mixer_device.volume.value)
+                "volume": float(track.mixer_device.volume.value),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -152,7 +147,7 @@ class TracksMixin(object):
                 "ok": True,
                 "message": "Track pan set",
                 "track_index": track_index,
-                "pan": float(track.mixer_device.panning.value)
+                "pan": float(track.mixer_device.panning.value),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -166,7 +161,11 @@ class TracksMixin(object):
             track = self.song.tracks[track_index]
             if track.can_be_armed:
                 track.arm = bool(armed)
-                return {"ok": True, "message": "Track armed" if armed else "Track disarmed", "armed": track.arm}
+                return {
+                    "ok": True,
+                    "message": "Track armed" if armed else "Track disarmed",
+                    "armed": track.arm,
+                }
             else:
                 return {"ok": False, "error": "Track cannot be armed"}
         except Exception as e:
@@ -205,7 +204,7 @@ class TracksMixin(object):
                 "ok": True,
                 "track_index": track_index,
                 "name": str(track.name),
-                "color": track.color if hasattr(track, 'color') else None,
+                "color": track.color if hasattr(track, "color") else None,
                 "is_foldable": track.is_foldable,
                 "mute": track.mute,
                 "solo": track.solo,
@@ -215,7 +214,7 @@ class TracksMixin(object):
                 "volume": float(track.mixer_device.volume.value),
                 "pan": float(track.mixer_device.panning.value),
                 "num_devices": len(track.devices),
-                "num_clips": len([cs for cs in track.clip_slots if cs.has_clip])
+                "num_clips": len([cs for cs in track.clip_slots if cs.has_clip]),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -227,7 +226,7 @@ class TracksMixin(object):
                 return {"ok": False, "error": "Invalid track index"}
 
             track = self.song.tracks[track_index]
-            if hasattr(track, 'color'):
+            if hasattr(track, "color"):
                 track.color = int(color_index)
                 return {"ok": True, "message": "Track color set", "color": track.color}
             else:
@@ -260,12 +259,11 @@ class TracksMixin(object):
             if track_index < 0 or track_index >= len(self.song.tracks):
                 return {"ok": False, "error": "Invalid track index"}
 
-            track = self.song.tracks[track_index]
             return {
                 "ok": True,
                 "message": "Input routing set (requires routing configuration)",
                 "routing_type": routing_type_name,
-                "routing_channel": routing_channel
+                "routing_channel": routing_channel,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -276,11 +274,10 @@ class TracksMixin(object):
             if track_index < 0 or track_index >= len(self.song.tracks):
                 return {"ok": False, "error": "Invalid track index"}
 
-            track = self.song.tracks[track_index]
             return {
                 "ok": True,
                 "message": "Output routing set (requires routing configuration)",
-                "routing_type": routing_type_name
+                "routing_type": routing_type_name,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -312,7 +309,7 @@ class TracksMixin(object):
 
             track = self.song.tracks[track_index]
             routing_types = []
-            if hasattr(track, 'available_input_routing_types'):
+            if hasattr(track, "available_input_routing_types"):
                 for routing in track.available_input_routing_types:
                     routing_types.append(str(routing.display_name))
 
@@ -328,7 +325,7 @@ class TracksMixin(object):
 
             track = self.song.tracks[track_index]
             routing_types = []
-            if hasattr(track, 'available_output_routing_types'):
+            if hasattr(track, "available_output_routing_types"):
                 for routing in track.available_output_routing_types:
                     routing_types.append(str(routing.display_name))
 
@@ -343,10 +340,12 @@ class TracksMixin(object):
                 return {"ok": False, "error": "Invalid track index"}
 
             track = self.song.tracks[track_index]
-            if hasattr(track, 'input_routing_type'):
+            if hasattr(track, "input_routing_type"):
                 return {
                     "ok": True,
-                    "routing_type": str(track.input_routing_type.display_name) if track.input_routing_type else None
+                    "routing_type": str(track.input_routing_type.display_name)
+                    if track.input_routing_type
+                    else None,
                 }
             else:
                 return {"ok": False, "error": "Track does not have input routing"}
@@ -365,17 +364,21 @@ class TracksMixin(object):
 
             track = self.song.tracks[track_index]
 
-            result = {
-                "ok": True,
-                "track_index": track_index,
-                "track_name": str(track.name)
-            }
+            result = {"ok": True, "track_index": track_index, "track_name": str(track.name)}
 
-            if hasattr(track, 'output_routing_type'):
-                result["output_routing_type"] = str(track.output_routing_type.display_name) if hasattr(track.output_routing_type, 'display_name') else str(track.output_routing_type)
+            if hasattr(track, "output_routing_type"):
+                result["output_routing_type"] = (
+                    str(track.output_routing_type.display_name)
+                    if hasattr(track.output_routing_type, "display_name")
+                    else str(track.output_routing_type)
+                )
 
-            if hasattr(track, 'output_routing_channel'):
-                result["output_routing_channel"] = str(track.output_routing_channel.display_name) if hasattr(track.output_routing_channel, 'display_name') else str(track.output_routing_channel)
+            if hasattr(track, "output_routing_channel"):
+                result["output_routing_channel"] = (
+                    str(track.output_routing_channel.display_name)
+                    if hasattr(track.output_routing_channel, "display_name")
+                    else str(track.output_routing_channel)
+                )
 
             return result
         except Exception as e:
@@ -389,14 +392,14 @@ class TracksMixin(object):
 
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'input_sub_routing'):
+            if hasattr(track, "input_sub_routing"):
                 # Sub-routing is typically set by index or name
                 # This is a simplified implementation
                 return {
                     "ok": True,
                     "message": "Input sub-routing setting is limited in LiveAPI",
                     "track_index": track_index,
-                    "requested_sub_routing": str(sub_routing)
+                    "requested_sub_routing": str(sub_routing),
                 }
             else:
                 return {"ok": False, "error": "Input sub-routing not available"}
@@ -411,14 +414,14 @@ class TracksMixin(object):
 
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'output_sub_routing'):
+            if hasattr(track, "output_sub_routing"):
                 # Sub-routing is typically set by index or name
                 # This is a simplified implementation
                 return {
                     "ok": True,
                     "message": "Output sub-routing setting is limited in LiveAPI",
                     "track_index": track_index,
-                    "requested_sub_routing": str(sub_routing)
+                    "requested_sub_routing": str(sub_routing),
                 }
             else:
                 return {"ok": False, "error": "Output sub-routing not available"}
@@ -442,7 +445,9 @@ class TracksMixin(object):
                 "ok": True,
                 "message": "Group track created",
                 "track_index": track_index,
-                "name": str(self.song.tracks[track_index].name) if track_index < len(self.song.tracks) else ""
+                "name": str(self.song.tracks[track_index].name)
+                if track_index < len(self.song.tracks)
+                else "",
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -463,7 +468,7 @@ class TracksMixin(object):
                 "ok": True,
                 "message": "Tracks grouped",
                 "start_index": start_index,
-                "end_index": end_index
+                "end_index": end_index,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -476,17 +481,17 @@ class TracksMixin(object):
 
             track = self.song.tracks[track_index]
 
-            is_grouped = hasattr(track, 'group_track') and track.group_track is not None
-            is_foldable = hasattr(track, 'is_foldable') and track.is_foldable
+            is_grouped = hasattr(track, "group_track") and track.group_track is not None
+            is_foldable = hasattr(track, "is_foldable") and track.is_foldable
 
             result = {
                 "ok": True,
                 "track_index": track_index,
                 "is_grouped": is_grouped,
-                "is_group_track": is_foldable
+                "is_group_track": is_foldable,
             }
 
-            if is_grouped and hasattr(track, 'group_track'):
+            if is_grouped and hasattr(track, "group_track"):
                 # Find the group track index
                 for i, t in enumerate(self.song.tracks):
                     if t == track.group_track:
@@ -505,14 +510,14 @@ class TracksMixin(object):
 
             track = self.song.tracks[group_track_index]
 
-            if not (hasattr(track, 'is_foldable') and track.is_foldable):
+            if not (hasattr(track, "is_foldable") and track.is_foldable):
                 return {"ok": False, "error": "Track is not a group track"}
 
             # Ungroup (LiveAPI may not have direct ungroup, this is a placeholder)
             return {
                 "ok": True,
                 "message": "Ungroup operation requested (may require manual implementation)",
-                "group_track_index": group_track_index
+                "group_track_index": group_track_index,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -526,15 +531,11 @@ class TracksMixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'freeze_available') and track.freeze_available:
-                if hasattr(track, 'freeze_state'):
+            if hasattr(track, "freeze_available") and track.freeze_available:
+                if hasattr(track, "freeze_state"):
                     # 0 = no freeze, 1 = frozen, 2 = frozen with tails
                     track.freeze_state = 1
-                    return {
-                        "ok": True,
-                        "track_index": track_index,
-                        "frozen": True
-                    }
+                    return {"ok": True, "track_index": track_index, "frozen": True}
                 else:
                     return {"ok": False, "error": "Freeze state not available"}
             else:
@@ -547,13 +548,9 @@ class TracksMixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'freeze_state'):
+            if hasattr(track, "freeze_state"):
                 track.freeze_state = 0
-                return {
-                    "ok": True,
-                    "track_index": track_index,
-                    "frozen": False
-                }
+                return {"ok": True, "track_index": track_index, "frozen": False}
             else:
                 return {"ok": False, "error": "Freeze state not available"}
         except Exception as e:
@@ -564,13 +561,9 @@ class TracksMixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'flatten'):
+            if hasattr(track, "flatten"):
                 track.flatten()
-                return {
-                    "ok": True,
-                    "track_index": track_index,
-                    "message": "Track flattened"
-                }
+                return {"ok": True, "track_index": track_index, "message": "Track flattened"}
             else:
                 return {"ok": False, "error": "Flatten not available (track must be frozen first)"}
         except Exception as e:
@@ -585,11 +578,8 @@ class TracksMixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'annotation'):
-                return {
-                    "ok": True,
-                    "annotation": str(track.annotation)
-                }
+            if hasattr(track, "annotation"):
+                return {"ok": True, "annotation": str(track.annotation)}
             else:
                 return {"ok": False, "error": "Track annotation not available"}
         except Exception as e:
@@ -600,12 +590,9 @@ class TracksMixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'annotation'):
+            if hasattr(track, "annotation"):
                 track.annotation = str(annotation_text)
-                return {
-                    "ok": True,
-                    "annotation": str(track.annotation)
-                }
+                return {"ok": True, "annotation": str(track.annotation)}
             else:
                 return {"ok": False, "error": "Track annotation not available"}
         except Exception as e:
@@ -620,11 +607,8 @@ class TracksMixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'delay'):
-                return {
-                    "ok": True,
-                    "delay": float(track.delay)
-                }
+            if hasattr(track, "delay"):
+                return {"ok": True, "delay": float(track.delay)}
             else:
                 return {"ok": False, "error": "Track delay not available"}
         except Exception as e:
@@ -635,12 +619,9 @@ class TracksMixin(object):
         try:
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'delay'):
+            if hasattr(track, "delay"):
                 track.delay = float(delay_samples)
-                return {
-                    "ok": True,
-                    "delay": float(track.delay)
-                }
+                return {"ok": True, "delay": float(track.delay)}
             else:
                 return {"ok": False, "error": "Track delay not available"}
         except Exception as e:

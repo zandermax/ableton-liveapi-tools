@@ -3,8 +3,7 @@ Session, transport, automation, and metronome operations.
 """
 
 
-class SessionTransportMixin(object):
-
+class SessionTransportMixin:
     # ========================================================================
     # SESSION CONTROL
     # ========================================================================
@@ -71,7 +70,7 @@ class SessionTransportMixin(object):
                 "record_mode": self.song.record_mode,
                 "metronome": self.song.metronome,
                 "nudge_up": self.song.nudge_up,
-                "nudge_down": self.song.nudge_down
+                "nudge_down": self.song.nudge_down,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -116,7 +115,7 @@ class SessionTransportMixin(object):
                 "ok": True,
                 "message": "Time signature set",
                 "numerator": self.song.signature_numerator,
-                "denominator": self.song.signature_denominator
+                "denominator": self.song.signature_denominator,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -187,7 +186,7 @@ class SessionTransportMixin(object):
             return {
                 "ok": True,
                 "current_song_time": float(self.song.current_song_time),
-                "is_playing": self.song.is_playing
+                "is_playing": self.song.is_playing,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -255,10 +254,7 @@ class SessionTransportMixin(object):
     def get_session_automation_record(self):
         """Get session automation recording state"""
         try:
-            return {
-                "ok": True,
-                "session_automation_record": self.song.session_automation_record
-            }
+            return {"ok": True, "session_automation_record": self.song.session_automation_record}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -273,10 +269,7 @@ class SessionTransportMixin(object):
     def get_session_record(self):
         """Get session record state"""
         try:
-            return {
-                "ok": True,
-                "session_record": self.song.session_record
-            }
+            return {"ok": True, "session_record": self.song.session_record}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -303,11 +296,8 @@ class SessionTransportMixin(object):
     def get_metronome_volume(self):
         """Get metronome volume"""
         try:
-            if hasattr(self.song, 'metronome'):
-                return {
-                    "ok": True,
-                    "volume": float(self.song.metronome)
-                }
+            if hasattr(self.song, "metronome"):
+                return {"ok": True, "volume": float(self.song.metronome)}
             else:
                 return {"ok": False, "error": "Metronome volume not available"}
         except Exception as e:
@@ -316,12 +306,9 @@ class SessionTransportMixin(object):
     def set_metronome_volume(self, volume):
         """Set metronome volume (0.0 to 1.0)"""
         try:
-            if hasattr(self.song, 'metronome'):
+            if hasattr(self.song, "metronome"):
                 self.song.metronome = float(volume)
-                return {
-                    "ok": True,
-                    "volume": float(self.song.metronome)
-                }
+                return {"ok": True, "volume": float(self.song.metronome)}
             else:
                 return {"ok": False, "error": "Metronome volume not available"}
         except Exception as e:

@@ -3,8 +3,7 @@ Mixing operations: sends, master track, return tracks, crossfader, groove, and q
 """
 
 
-class MixingMixin(object):
-
+class MixingMixin:
     # ========================================================================
     # SEND OPERATIONS
     # ========================================================================
@@ -22,11 +21,7 @@ class MixingMixin(object):
                 return {"ok": False, "error": "Invalid send index"}
 
             sends[send_index].value = float(value)
-            return {
-                "ok": True,
-                "send_index": send_index,
-                "value": float(sends[send_index].value)
-            }
+            return {"ok": True, "send_index": send_index, "value": float(sends[send_index].value)}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -40,18 +35,15 @@ class MixingMixin(object):
             sends = []
 
             for i, send in enumerate(track.mixer_device.sends):
-                sends.append({
-                    "index": i,
-                    "value": float(send.value),
-                    "name": str(send.name) if hasattr(send, 'name') else "Send " + chr(65+i)
-                })
+                sends.append(
+                    {
+                        "index": i,
+                        "value": float(send.value),
+                        "name": str(send.name) if hasattr(send, "name") else "Send " + chr(65 + i),
+                    }
+                )
 
-            return {
-                "ok": True,
-                "track_index": track_index,
-                "sends": sends,
-                "count": len(sends)
-            }
+            return {"ok": True, "track_index": track_index, "sends": sends, "count": len(sends)}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -67,9 +59,13 @@ class MixingMixin(object):
             info = {
                 "ok": True,
                 "name": str(master.name),
-                "volume": float(master.mixer_device.volume.value) if hasattr(master, 'mixer_device') else 0.0,
-                "pan": float(master.mixer_device.panning.value) if hasattr(master, 'mixer_device') else 0.0,
-                "num_devices": len(master.devices) if hasattr(master, 'devices') else 0
+                "volume": float(master.mixer_device.volume.value)
+                if hasattr(master, "mixer_device")
+                else 0.0,
+                "pan": float(master.mixer_device.panning.value)
+                if hasattr(master, "mixer_device")
+                else 0.0,
+                "num_devices": len(master.devices) if hasattr(master, "devices") else 0,
             }
 
             return info
@@ -80,12 +76,9 @@ class MixingMixin(object):
         """Set master track volume (0.0 to 1.0)"""
         try:
             master = self.song.master_track
-            if hasattr(master, 'mixer_device'):
+            if hasattr(master, "mixer_device"):
                 master.mixer_device.volume.value = float(max(0.0, min(1.0, volume)))
-                return {
-                    "ok": True,
-                    "volume": float(master.mixer_device.volume.value)
-                }
+                return {"ok": True, "volume": float(master.mixer_device.volume.value)}
             else:
                 return {"ok": False, "error": "Master mixer device not available"}
         except Exception as e:
@@ -95,12 +88,9 @@ class MixingMixin(object):
         """Set master track pan (-1.0 to 1.0)"""
         try:
             master = self.song.master_track
-            if hasattr(master, 'mixer_device'):
+            if hasattr(master, "mixer_device"):
                 master.mixer_device.panning.value = float(max(-1.0, min(1.0, pan)))
-                return {
-                    "ok": True,
-                    "pan": float(master.mixer_device.panning.value)
-                }
+                return {"ok": True, "pan": float(master.mixer_device.panning.value)}
             else:
                 return {"ok": False, "error": "Master mixer device not available"}
         except Exception as e:
@@ -112,19 +102,17 @@ class MixingMixin(object):
             master = self.song.master_track
             devices = []
 
-            if hasattr(master, 'devices'):
+            if hasattr(master, "devices"):
                 for device in master.devices:
-                    devices.append({
-                        "name": str(device.name),
-                        "class_name": str(device.class_name),
-                        "is_active": device.is_active
-                    })
+                    devices.append(
+                        {
+                            "name": str(device.name),
+                            "class_name": str(device.class_name),
+                            "is_active": device.is_active,
+                        }
+                    )
 
-            return {
-                "ok": True,
-                "devices": devices,
-                "count": len(devices)
-            }
+            return {"ok": True, "devices": devices, "count": len(devices)}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -135,10 +123,7 @@ class MixingMixin(object):
     def get_return_track_count(self):
         """Get number of return tracks"""
         try:
-            return {
-                "ok": True,
-                "count": len(self.song.return_tracks)
-            }
+            return {"ok": True, "count": len(self.song.return_tracks)}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -158,7 +143,7 @@ class MixingMixin(object):
                 "pan": float(return_track.mixer_device.panning.value),
                 "mute": return_track.mute,
                 "solo": return_track.solo,
-                "num_devices": len(return_track.devices)
+                "num_devices": len(return_track.devices),
             }
 
             return info
@@ -177,7 +162,7 @@ class MixingMixin(object):
             return {
                 "ok": True,
                 "return_index": return_index,
-                "volume": float(return_track.mixer_device.volume.value)
+                "volume": float(return_track.mixer_device.volume.value),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -196,13 +181,13 @@ class MixingMixin(object):
 
             assignment_names = {0: "None", 1: "A", 2: "B"}
 
-            if hasattr(track, 'mixer_device') and hasattr(track.mixer_device, 'crossfade_assign'):
+            if hasattr(track, "mixer_device") and hasattr(track.mixer_device, "crossfade_assign"):
                 assignment = int(track.mixer_device.crossfade_assign)
                 return {
                     "ok": True,
                     "track_index": track_index,
                     "crossfader_assignment": assignment,
-                    "assignment_name": assignment_names.get(assignment, "Unknown")
+                    "assignment_name": assignment_names.get(assignment, "Unknown"),
                 }
             else:
                 return {"ok": False, "error": "Crossfader assignment not available"}
@@ -217,12 +202,12 @@ class MixingMixin(object):
 
             track = self.song.tracks[track_index]
 
-            if hasattr(track, 'mixer_device') and hasattr(track.mixer_device, 'crossfade_assign'):
+            if hasattr(track, "mixer_device") and hasattr(track.mixer_device, "crossfade_assign"):
                 track.mixer_device.crossfade_assign = int(max(0, min(2, assignment)))
                 return {
                     "ok": True,
                     "track_index": track_index,
-                    "crossfader_assignment": int(track.mixer_device.crossfade_assign)
+                    "crossfader_assignment": int(track.mixer_device.crossfade_assign),
                 }
             else:
                 return {"ok": False, "error": "Crossfader assignment not available"}
@@ -233,11 +218,8 @@ class MixingMixin(object):
         """Get master crossfader position (-1.0 to 1.0)"""
         try:
             master = self.song.master_track
-            if hasattr(master, 'mixer_device') and hasattr(master.mixer_device, 'crossfader'):
-                return {
-                    "ok": True,
-                    "position": float(master.mixer_device.crossfader.value)
-                }
+            if hasattr(master, "mixer_device") and hasattr(master.mixer_device, "crossfader"):
+                return {"ok": True, "position": float(master.mixer_device.crossfader.value)}
             else:
                 return {"ok": False, "error": "Crossfader not available"}
         except Exception as e:
@@ -262,7 +244,7 @@ class MixingMixin(object):
                 return {"ok": False, "error": "No clip in slot"}
 
             clip = clip_slot.clip
-            if hasattr(clip, 'groove_amount'):
+            if hasattr(clip, "groove_amount"):
                 clip.groove_amount = float(amount)
                 return {"ok": True, "groove_amount": float(clip.groove_amount)}
             else:
@@ -285,7 +267,7 @@ class MixingMixin(object):
                 return {"ok": False, "error": "No MIDI clip in slot"}
 
             clip = clip_slot.clip
-            if hasattr(clip, 'quantize'):
+            if hasattr(clip, "quantize"):
                 clip.quantize(float(quantize_to), 1.0)
                 return {"ok": True, "message": "Clip quantized", "quantize_to": quantize_to}
             else:
@@ -308,7 +290,7 @@ class MixingMixin(object):
                 return {"ok": False, "error": "No MIDI clip in slot"}
 
             clip = clip_slot.clip
-            if hasattr(clip, 'quantize_pitch'):
+            if hasattr(clip, "quantize_pitch"):
                 clip.quantize_pitch(int(pitch), int(pitch), 1.0)
                 return {"ok": True, "message": "Clip pitch quantized", "pitch": pitch}
             else:
@@ -319,7 +301,7 @@ class MixingMixin(object):
     def get_groove_amount(self):
         """Get song groove amount"""
         try:
-            if hasattr(self.song, 'groove_amount'):
+            if hasattr(self.song, "groove_amount"):
                 return {"ok": True, "groove_amount": float(self.song.groove_amount)}
             else:
                 return {"ok": False, "error": "Song does not support groove_amount"}
@@ -329,7 +311,7 @@ class MixingMixin(object):
     def set_groove_amount(self, amount):
         """Set song groove amount (0.0-1.0)"""
         try:
-            if hasattr(self.song, 'groove_amount'):
+            if hasattr(self.song, "groove_amount"):
                 self.song.groove_amount = float(amount)
                 return {"ok": True, "groove_amount": float(self.song.groove_amount)}
             else:
@@ -346,27 +328,23 @@ class MixingMixin(object):
         try:
             grooves = []
 
-            if hasattr(self.song, 'groove_pool'):
+            if hasattr(self.song, "groove_pool"):
                 for i, groove in enumerate(self.song.groove_pool):
                     groove_info = {
                         "index": i,
-                        "name": str(groove.name) if hasattr(groove, 'name') else "Groove {}".format(i)
+                        "name": str(groove.name) if hasattr(groove, "name") else f"Groove {i}",
                     }
 
-                    if hasattr(groove, 'timing_amount'):
+                    if hasattr(groove, "timing_amount"):
                         groove_info["timing_amount"] = float(groove.timing_amount)
-                    if hasattr(groove, 'random_amount'):
+                    if hasattr(groove, "random_amount"):
                         groove_info["random_amount"] = float(groove.random_amount)
-                    if hasattr(groove, 'velocity_amount'):
+                    if hasattr(groove, "velocity_amount"):
                         groove_info["velocity_amount"] = float(groove.velocity_amount)
 
                     grooves.append(groove_info)
 
-            return {
-                "ok": True,
-                "grooves": grooves,
-                "count": len(grooves)
-            }
+            return {"ok": True, "grooves": grooves, "count": len(grooves)}
         except Exception as e:
             return {"ok": False, "error": str(e)}
 
@@ -386,14 +364,14 @@ class MixingMixin(object):
 
             clip = clip_slot.clip
 
-            if hasattr(self.song, 'groove_pool') and groove_index >= 0 and groove_index < len(self.song.groove_pool):
-                if hasattr(clip, 'groove'):
+            if (
+                hasattr(self.song, "groove_pool")
+                and groove_index >= 0
+                and groove_index < len(self.song.groove_pool)
+            ):
+                if hasattr(clip, "groove"):
                     clip.groove = self.song.groove_pool[groove_index]
-                    return {
-                        "ok": True,
-                        "message": "Groove set",
-                        "groove_index": groove_index
-                    }
+                    return {"ok": True, "message": "Groove set", "groove_index": groove_index}
                 else:
                     return {"ok": False, "error": "Clip groove property not available"}
             else:

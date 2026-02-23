@@ -14,15 +14,15 @@ Requirements:
 - At least one track with a CV Tools device (e.g., CV LFO)
 """
 
-import socket
 import json
+import socket
 import time
 
 
 class AbletonM4LController:
     """Helper class for controlling Max for Live and CV Tools devices"""
 
-    def __init__(self, host='localhost', port=9004):
+    def __init__(self, host="localhost", port=9004):
         self.host = host
         self.port = port
 
@@ -30,15 +30,15 @@ class AbletonM4LController:
         """Send command to Ableton via TCP socket"""
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((self.host, self.port))
-        sock.sendall(json.dumps(command).encode() + b'\n')
+        sock.sendall(json.dumps(command).encode() + b"\n")
 
-        response = b''
+        response = b""
         while True:
             chunk = sock.recv(4096)
             if not chunk:
                 break
             response += chunk
-            if b'\n' in chunk:
+            if b"\n" in chunk:
                 break
 
         sock.close()
@@ -46,65 +46,60 @@ class AbletonM4LController:
 
     def get_m4l_devices(self, track_index):
         """Get all Max for Live devices on track"""
-        return self.send({
-            "action": "get_m4l_devices",
-            "track_index": track_index
-        })
+        return self.send({"action": "get_m4l_devices", "track_index": track_index})
 
     def get_cv_tools_devices(self, track_index):
         """Get all CV Tools devices on track"""
-        return self.send({
-            "action": "get_cv_tools_devices",
-            "track_index": track_index
-        })
+        return self.send({"action": "get_cv_tools_devices", "track_index": track_index})
 
     def is_max_device(self, track_index, device_index):
         """Check if device is a Max for Live device"""
-        return self.send({
-            "action": "is_max_device",
-            "track_index": track_index,
-            "device_index": device_index
-        })
+        return self.send(
+            {"action": "is_max_device", "track_index": track_index, "device_index": device_index}
+        )
 
     def set_device_param_by_name(self, track_index, device_index, param_name, value):
         """Set device parameter by name"""
-        return self.send({
-            "action": "set_device_param_by_name",
-            "track_index": track_index,
-            "device_index": device_index,
-            "param_name": param_name,
-            "value": value
-        })
+        return self.send(
+            {
+                "action": "set_device_param_by_name",
+                "track_index": track_index,
+                "device_index": device_index,
+                "param_name": param_name,
+                "value": value,
+            }
+        )
 
     def get_m4l_param_by_name(self, track_index, device_index, param_name):
         """Get M4L parameter value by name"""
-        return self.send({
-            "action": "get_m4l_param_by_name",
-            "track_index": track_index,
-            "device_index": device_index,
-            "param_name": param_name
-        })
+        return self.send(
+            {
+                "action": "get_m4l_param_by_name",
+                "track_index": track_index,
+                "device_index": device_index,
+                "param_name": param_name,
+            }
+        )
 
     def get_device_parameters(self, track_index, device_index):
         """Get all parameters of a device"""
-        return self.send({
-            "action": "get_device_parameters",
-            "track_index": track_index,
-            "device_index": device_index
-        })
+        return self.send(
+            {
+                "action": "get_device_parameters",
+                "track_index": track_index,
+                "device_index": device_index,
+            }
+        )
 
     def find_device(self, track_index, device_name_contains):
         """Find device by partial name match"""
-        result = self.send({
-            "action": "get_track_devices",
-            "track_index": track_index
-        })
+        result = self.send({"action": "get_track_devices", "track_index": track_index})
 
-        if not result.get('ok'):
+        if not result.get("ok"):
             return None
 
-        for i, device in enumerate(result['devices']):
-            if device_name_contains.lower() in device['name'].lower():
+        for i, device in enumerate(result["devices"]):
+            if device_name_contains.lower() in device["name"].lower():
                 return i
         return None
 
@@ -119,7 +114,7 @@ def main():
     # Test connection
     try:
         response = controller.send({"action": "ping"})
-        if not response.get('ok'):
+        if not response.get("ok"):
             print("ERROR: Could not connect to Ableton")
             return
         print("✓ Connected to Ableton Live\n")
@@ -132,17 +127,17 @@ def main():
     print("Example 1: Finding Max for Live devices on track 0...")
     m4l_result = controller.get_m4l_devices(0)
 
-    if m4l_result.get('ok'):
-        devices = m4l_result.get('devices', [])
-        print("Found {} M4L device(s):".format(len(devices)))
+    if m4l_result.get("ok"):
+        devices = m4l_result.get("devices", [])
+        print(f"Found {len(devices)} M4L device(s):")
         for device in devices:
-            print("  - {} (type: {}, index: {})".format(
-                device['name'],
-                device['type'],
-                device['index']
-            ))
+            print(
+                "  - {} (type: {}, index: {})".format(
+                    device["name"], device["type"], device["index"]
+                )
+            )
     else:
-        print("Error:", m4l_result.get('error'))
+        print("Error:", m4l_result.get("error"))
 
     print()
 
@@ -150,17 +145,17 @@ def main():
     print("Example 2: Finding CV Tools devices on track 0...")
     cv_result = controller.get_cv_tools_devices(0)
 
-    if cv_result.get('ok'):
-        cv_devices = cv_result.get('cv_devices', [])
+    if cv_result.get("ok"):
+        cv_devices = cv_result.get("cv_devices", [])
         if len(cv_devices) > 0:
-            print("Found {} CV Tools device(s):".format(len(cv_devices)))
+            print(f"Found {len(cv_devices)} CV Tools device(s):")
             for device in cv_devices:
-                print("  - {} (index: {})".format(device['name'], device['index']))
+                print("  - {} (index: {})".format(device["name"], device["index"]))
         else:
             print("No CV Tools devices found on track 0")
             print("Tip: Add a CV LFO or other CV Tools device to track 0 to test this example")
     else:
-        print("Error:", cv_result.get('error'))
+        print("Error:", cv_result.get("error"))
 
     print()
 
@@ -169,26 +164,25 @@ def main():
     lfo_index = controller.find_device(0, "CV LFO")
 
     if lfo_index is not None:
-        print("Found CV LFO at device index {}".format(lfo_index))
+        print(f"Found CV LFO at device index {lfo_index}")
 
         # Verify it's a M4L device
         check = controller.is_max_device(0, lfo_index)
-        if check.get('ok') and check.get('is_m4l'):
+        if check.get("ok") and check.get("is_m4l"):
             print("✓ Confirmed as Max for Live device")
-            print("  Class: {}".format(check.get('class_name')))
+            print("  Class: {}".format(check.get("class_name")))
 
         # Get all parameters
         print("\nGetting LFO parameters...")
         params = controller.get_device_parameters(0, lfo_index)
-        if params.get('ok'):
-            print("LFO has {} parameters:".format(len(params.get('parameters', []))))
-            for param in params.get('parameters', [])[:10]:  # Show first 10
-                print("  - {}: {} (range: {} to {})".format(
-                    param['name'],
-                    param['value'],
-                    param['min'],
-                    param['max']
-                ))
+        if params.get("ok"):
+            print("LFO has {} parameters:".format(len(params.get("parameters", []))))
+            for param in params.get("parameters", [])[:10]:  # Show first 10
+                print(
+                    "  - {}: {} (range: {} to {})".format(
+                        param["name"], param["value"], param["min"], param["max"]
+                    )
+                )
 
         # Animate LFO rate parameter
         print("\nAnimating LFO Rate parameter...")
@@ -198,14 +192,14 @@ def main():
             rate = i / 10.0
             result = controller.set_device_param_by_name(0, lfo_index, "Rate", rate)
 
-            if result.get('ok'):
-                print("  Set Rate to {:.2f}".format(rate))
+            if result.get("ok"):
+                print(f"  Set Rate to {rate:.2f}")
             else:
                 # If "Rate" parameter doesn't exist, try other common LFO parameters
                 print("  Note: 'Rate' parameter not found - trying 'Frequency'...")
                 result = controller.set_device_param_by_name(0, lfo_index, "Frequency", rate)
-                if result.get('ok'):
-                    print("  Set Frequency to {:.2f}".format(rate))
+                if result.get("ok"):
+                    print(f"  Set Frequency to {rate:.2f}")
 
             time.sleep(0.5)
 
@@ -221,12 +215,12 @@ def main():
     print("Example 4: Get specific parameter value...")
     if lfo_index is not None:
         param_result = controller.get_m4l_param_by_name(0, lfo_index, "Rate")
-        if param_result.get('ok'):
+        if param_result.get("ok"):
             print("Current Rate parameter:")
-            print("  Value: {}".format(param_result.get('value')))
-            print("  Range: {} to {}".format(param_result.get('min'), param_result.get('max')))
+            print("  Value: {}".format(param_result.get("value")))
+            print("  Range: {} to {}".format(param_result.get("min"), param_result.get("max")))
         else:
-            print("Could not get Rate parameter:", param_result.get('error'))
+            print("Could not get Rate parameter:", param_result.get("error"))
 
     print("\n" + "=" * 50)
     print("Example complete!")

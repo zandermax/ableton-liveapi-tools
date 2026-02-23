@@ -3,8 +3,7 @@ Scene operations and scene color management.
 """
 
 
-class ScenesMixin(object):
-
+class ScenesMixin:
     # ========================================================================
     # SCENE OPERATIONS
     # ========================================================================
@@ -22,7 +21,7 @@ class ScenesMixin(object):
                 "ok": True,
                 "message": "Scene created",
                 "scene_index": scene_index,
-                "name": str(self.song.scenes[scene_index].name)
+                "name": str(self.song.scenes[scene_index].name),
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -82,9 +81,11 @@ class ScenesMixin(object):
                 "ok": True,
                 "scene_index": scene_index,
                 "name": str(scene.name),
-                "color": scene.color if hasattr(scene, 'color') else None,
-                "tempo": float(scene.tempo) if hasattr(scene, 'tempo') else None,
-                "time_signature_numerator": scene.time_signature_numerator if hasattr(scene, 'time_signature_numerator') else None
+                "color": scene.color if hasattr(scene, "color") else None,
+                "tempo": float(scene.tempo) if hasattr(scene, "tempo") else None,
+                "time_signature_numerator": scene.time_signature_numerator
+                if hasattr(scene, "time_signature_numerator")
+                else None,
             }
         except Exception as e:
             return {"ok": False, "error": str(e)}
@@ -98,11 +99,8 @@ class ScenesMixin(object):
         try:
             scene = self.song.scenes[scene_index]
 
-            if hasattr(scene, 'color'):
-                return {
-                    "ok": True,
-                    "color": int(scene.color)
-                }
+            if hasattr(scene, "color"):
+                return {"ok": True, "color": int(scene.color)}
             else:
                 return {"ok": False, "error": "Scene color not available"}
         except Exception as e:
@@ -113,12 +111,9 @@ class ScenesMixin(object):
         try:
             scene = self.song.scenes[scene_index]
 
-            if hasattr(scene, 'color'):
+            if hasattr(scene, "color"):
                 scene.color = int(color_index)
-                return {
-                    "ok": True,
-                    "color": int(scene.color)
-                }
+                return {"ok": True, "color": int(scene.color)}
             else:
                 return {"ok": False, "error": "Scene color not available"}
         except Exception as e:
