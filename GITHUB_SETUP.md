@@ -77,12 +77,12 @@ git push
 
 ### 5. Create Release (Optional)
 
-Create a tagged release for version 1.0.0:
+Create a tagged release (e.g. for v1.1.0):
 
 ```bash
 # Create and push tag
-git tag -a v1.0.0 -m "Initial release: 220 LiveAPI tools"
-git push origin v1.0.0
+git tag -a v1.1.0 -m "v1.1.0: Modular architecture refactor"
+git push origin v1.1.0
 ```
 
 Then on GitHub:

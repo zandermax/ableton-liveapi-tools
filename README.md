@@ -5,7 +5,7 @@ A comprehensive Python Remote Script for Ableton Live that exposes **220 LiveAPI
 [![CI](https://github.com/Ziforge/ableton-liveapi-tools/workflows/CI/badge.svg)](https://github.com/Ziforge/ableton-liveapi-tools/actions)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL%203.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Ableton Live](https://img.shields.io/badge/Ableton%20Live-11%2F12-blue.svg)](https://www.ableton.com/)
-[![Python](https://img.shields.io/badge/Python-2.7%2F3.x-green.svg)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.7%2B-green.svg)](https://www.python.org/)
 [![Release](https://img.shields.io/github/v/release/Ziforge/ableton-liveapi-tools)](https://github.com/Ziforge/ableton-liveapi-tools/releases)
 
 ## Features

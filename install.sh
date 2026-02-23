@@ -48,7 +48,7 @@ echo "Installing ClaudeMCP Remote Script..."
 cp -r ClaudeMCP_Remote "$INSTALL_DIR"
 
 # Verify installation
-if [ -f "$INSTALL_DIR/__init__.py" ] && [ -f "$INSTALL_DIR/liveapi_tools.py" ]; then
+if [ -f "$INSTALL_DIR/__init__.py" ] && [ -f "$INSTALL_DIR/liveapi_tools.py" ] && [ -d "$INSTALL_DIR/tools" ]; then
     echo ""
     echo "Installation successful!"
     echo ""

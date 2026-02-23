@@ -45,7 +45,7 @@ Use the feature request template when suggesting features.
 3. **Test your changes**:
    - Test with Ableton Live (ideally both 11 and 12)
    - Verify TCP socket communication works
-   - Ensure Python 2.7 compatibility (Ableton's Python version)
+   - Ensure Python 3.7+ compatibility (Ableton Live 11+ uses Python 3)
    - Test on your OS (note which OS in PR)
 
 4. **Update documentation**:
