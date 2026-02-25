@@ -88,10 +88,10 @@ git push origin v1.1.0
 Then on GitHub:
 1. Go to Releases → Create new release
 2. Select tag `v1.0.0`
-3. Title: `ClaudeMCP Remote Script v1.0.0`
+3. Title: `ALiveMCP Remote Script v1.0.0`
 4. Description:
    ```
-   Initial release of ClaudeMCP Remote Script
+   Initial release of ALiveMCP Remote Script
 
    Features:
    - 220 LiveAPI tools covering all aspects of Ableton Live (including Max for Live & CV Tools)
@@ -180,7 +180,7 @@ What you expected to happen.
 **Environment:**
 - Ableton Live version:
 - Operating System:
-- ClaudeMCP version:
+- ALiveMCP version:
 
 **Additional context**
 Any other context about the problem.

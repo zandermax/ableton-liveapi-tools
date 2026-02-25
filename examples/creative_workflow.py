@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Creative workflow example - Generative music composition
-Demonstrates algorithmic music creation using ClaudeMCP Remote Script
+Demonstrates algorithmic music creation using ALiveMCP Remote Script
 """
 
 import json
@@ -11,7 +11,7 @@ import time
 
 
 def send_command(action, **params):
-    """Send command to ClaudeMCP Remote Script"""
+    """Send command to ALiveMCP Remote Script"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.settimeout(10)
     sock.connect(("127.0.0.1", 9004))
@@ -95,7 +95,7 @@ def create_generative_drums(track_idx, scene_idx):
 
 def main():
     print("=" * 80)
-    print("ClaudeMCP - Generative Music Composition")
+    print("ALiveMCP - Generative Music Composition")
     print("=" * 80)
     print()
 

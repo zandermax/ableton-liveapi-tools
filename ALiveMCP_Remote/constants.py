@@ -1,5 +1,5 @@
 """
-Shared constants for the ClaudeMCP Remote Script.
+Shared constants for the ALiveMCP Remote Script.
 
 Centralising these here means socket_server.py and __init__.py stay in sync
 without magic numbers scattered across files.

@@ -1,6 +1,6 @@
-# ClaudeMCP Web Dashboard
+# ALiveMCP Web Dashboard
 
-A browser-based dashboard for controlling Ableton Live via the ClaudeMCP Remote Script.
+A browser-based dashboard for controlling Ableton Live via the ALiveMCP Remote Script.
 
 ## Architecture
 
@@ -9,7 +9,7 @@ Browser (index.html)
     ↕  WebSocket  ws://localhost:8080/ws
 Python bridge (server.py)
     ↕  TCP JSON  127.0.0.1:9004
-Ableton Live + ClaudeMCP Remote Script
+Ableton Live + ALiveMCP Remote Script
 ```
 
 The bridge accepts a persistent WebSocket connection from the browser and
@@ -17,7 +17,7 @@ proxies each JSON command to the Ableton TCP socket, returning the response.
 
 ## Requirements
 
-- Ableton Live with the ClaudeMCP Remote Script installed and loaded
+- Ableton Live with the ALiveMCP Remote Script installed and loaded
 - Python 3.8+
 
 ## Quick start

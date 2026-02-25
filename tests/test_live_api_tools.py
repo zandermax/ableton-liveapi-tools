@@ -2,7 +2,7 @@
 Tests for LiveAPITools: get_available_tools and mixin composition.
 """
 
-from ClaudeMCP_Remote.liveapi_tools import LiveAPITools
+from ALiveMCP_Remote.liveapi_tools import LiveAPITools
 
 
 def test_get_available_tools_returns_list(tools):
@@ -33,17 +33,17 @@ def test_get_available_tools_contains_domain_tools(tools):
 
 
 def test_live_api_tools_is_composed_of_all_mixins(song, c_instance):
-    from ClaudeMCP_Remote.tools.arrangement import ArrangementMixin
-    from ClaudeMCP_Remote.tools.automation import AutomationMixin
-    from ClaudeMCP_Remote.tools.base import BaseMixin
-    from ClaudeMCP_Remote.tools.clips import ClipsMixin
-    from ClaudeMCP_Remote.tools.devices import DevicesMixin
-    from ClaudeMCP_Remote.tools.m4l_and_live12 import M4LAndLive12Mixin
-    from ClaudeMCP_Remote.tools.midi import MidiMixin
-    from ClaudeMCP_Remote.tools.mixing import MixingMixin
-    from ClaudeMCP_Remote.tools.scenes import ScenesMixin
-    from ClaudeMCP_Remote.tools.session_transport import SessionTransportMixin
-    from ClaudeMCP_Remote.tools.tracks import TracksMixin
+    from ALiveMCP_Remote.tools.arrangement import ArrangementMixin
+    from ALiveMCP_Remote.tools.automation import AutomationMixin
+    from ALiveMCP_Remote.tools.base import BaseMixin
+    from ALiveMCP_Remote.tools.clips import ClipsMixin
+    from ALiveMCP_Remote.tools.devices import DevicesMixin
+    from ALiveMCP_Remote.tools.m4l_and_live12 import M4LAndLive12Mixin
+    from ALiveMCP_Remote.tools.midi import MidiMixin
+    from ALiveMCP_Remote.tools.mixing import MixingMixin
+    from ALiveMCP_Remote.tools.scenes import ScenesMixin
+    from ALiveMCP_Remote.tools.session_transport import SessionTransportMixin
+    from ALiveMCP_Remote.tools.tracks import TracksMixin
 
     t = LiveAPITools(song, c_instance)
     assert isinstance(t, BaseMixin)

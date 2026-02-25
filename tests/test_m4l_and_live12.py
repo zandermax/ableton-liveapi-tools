@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-import ClaudeMCP_Remote.tools.m4l_and_live12 as m4l_module
+import ALiveMCP_Remote.tools.m4l_and_live12 as m4l_module
 
 # ---------------------------------------------------------------------------
 # Helpers

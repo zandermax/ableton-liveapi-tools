@@ -2,7 +2,7 @@
 """
 Mock Ableton TCP server for development, testing, and UI demos.
 
-Listens on 127.0.0.1:9004 (same port as the real ClaudeMCP Remote Script)
+Listens on 127.0.0.1:9004 (same port as the real ALiveMCP Remote Script)
 and responds to JSON commands with realistic mock data. Maintains in-memory
 session state that mutates on write commands, so the web dashboard and any
 client script behaves as though a real Ableton session is running.
@@ -115,7 +115,7 @@ def _handle(action, p):  # noqa: C901 — intentionally flat dispatch
         return {
             "ok": True,
             "message": "pong (mock server)",
-            "script": "ClaudeMCP_Remote",
+            "script": "ALiveMCP_Remote",
             "version": VERSION,
         }
 
@@ -401,7 +401,7 @@ def main():
         sys.exit(1)
 
     srv.listen(5)
-    print(f"ClaudeMCP mock server listening on {HOST}:{PORT}")
+    print(f"ALiveMCP mock server listening on {HOST}:{PORT}")
     print(
         "Initial state: {} tracks, {} scenes, {} clips".format(
             len(_state["tracks"]), len(_state["scenes"]), len(_state["clips"])

@@ -24,7 +24,7 @@ bash install.sh
 The installation script performs the following operations:
 1. Detects operating system and determines correct installation path
 2. Backs up existing installation if present
-3. Copies `ClaudeMCP_Remote` directory to Ableton's Remote Scripts folder
+3. Copies `ALiveMCP_Remote` directory to Ableton's Remote Scripts folder
 4. Verifies file integrity
 
 ### Method 2: Manual Installation
@@ -32,12 +32,12 @@ The installation script performs the following operations:
 #### macOS
 
 ```bash
-cp -r ClaudeMCP_Remote ~/Music/Ableton/User\ Library/Remote\ Scripts/
+cp -r ALiveMCP_Remote ~/Music/Ableton/User\ Library/Remote\ Scripts/
 ```
 
 #### Windows
 
-Copy the `ClaudeMCP_Remote` directory to:
+Copy the `ALiveMCP_Remote` directory to:
 ```
 %USERPROFILE%\Documents\Ableton\User Library\Remote Scripts\
 ```
@@ -45,7 +45,7 @@ Copy the `ClaudeMCP_Remote` directory to:
 #### Linux
 
 ```bash
-cp -r ClaudeMCP_Remote ~/Music/Ableton/User\ Library/Remote\ Scripts/
+cp -r ALiveMCP_Remote ~/Music/Ableton/User\ Library/Remote\ Scripts/
 ```
 
 ## Post-Installation
@@ -86,12 +86,12 @@ If the Remote Script does not load:
 1. **Check file permissions**
    ```bash
    # macOS/Linux - ensure files are readable
-   chmod -R 755 ~/Music/Ableton/User\ Library/Remote\ Scripts/ClaudeMCP_Remote
+   chmod -R 755 ~/Music/Ableton/User\ Library/Remote\ Scripts/ALiveMCP_Remote
    ```
 
 2. **Verify file structure**
    ```
-   ClaudeMCP_Remote/
+   ALiveMCP_Remote/
    ├── __init__.py
    └── liveapi_tools.py
    ```
@@ -100,7 +100,7 @@ If the Remote Script does not load:
    - macOS: `~/Library/Preferences/Ableton/Live */Log.txt`
    - Windows: `%APPDATA%\Ableton\Live *\Preferences\Log.txt`
 
-   Search for "ClaudeMCP" or errors related to Remote Scripts.
+   Search for "ALiveMCP" or errors related to Remote Scripts.
 
 4. **Python compatibility**
    - Ableton Live 11/12 uses Python 2.7
@@ -136,21 +136,21 @@ To change the default port (9004):
 
 ### macOS/Linux
 ```bash
-rm -rf ~/Music/Ableton/User\ Library/Remote\ Scripts/ClaudeMCP_Remote
+rm -rf ~/Music/Ableton/User\ Library/Remote\ Scripts/ALiveMCP_Remote
 ```
 
 ### Windows
 Delete the directory:
 ```
-%USERPROFILE%\Documents\Ableton\User Library\Remote Scripts\ClaudeMCP_Remote
+%USERPROFILE%\Documents\Ableton\User Library\Remote Scripts\ALiveMCP_Remote
 ```
 
 ## Upgrade Procedure
 
 1. Backup existing installation:
    ```bash
-   cp -r ~/Music/Ableton/User\ Library/Remote\ Scripts/ClaudeMCP_Remote \
-         ~/Music/Ableton/User\ Library/Remote\ Scripts/ClaudeMCP_Remote.backup
+   cp -r ~/Music/Ableton/User\ Library/Remote\ Scripts/ALiveMCP_Remote \
+         ~/Music/Ableton/User\ Library/Remote\ Scripts/ALiveMCP_Remote.backup
    ```
 
 2. Pull latest changes:
@@ -178,8 +178,8 @@ For development and debugging:
 2. Create symlink to Remote Scripts directory:
    ```bash
    # macOS/Linux
-   ln -s $(pwd)/ClaudeMCP_Remote \
-         ~/Music/Ableton/User\ Library/Remote\ Scripts/ClaudeMCP_Remote
+   ln -s $(pwd)/ALiveMCP_Remote \
+         ~/Music/Ableton/User\ Library/Remote\ Scripts/ALiveMCP_Remote
    ```
 
 3. Edit files in repository, changes take effect after Ableton restart

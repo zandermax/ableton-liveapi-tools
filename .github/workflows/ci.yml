@@ -16,11 +16,11 @@ jobs:
     - name: Check file structure
       run: |
         echo "Checking required files..."
-        test -f ClaudeMCP_Remote/__init__.py || (echo "Missing ClaudeMCP_Remote/__init__.py" && exit 1)
-        test -f ClaudeMCP_Remote/liveapi_tools.py || (echo "Missing ClaudeMCP_Remote/liveapi_tools.py" && exit 1)
-        test -d ClaudeMCP_Remote/tools || (echo "Missing ClaudeMCP_Remote/tools/ directory" && exit 1)
-        test -f ClaudeMCP_Remote/tools/__init__.py || (echo "Missing ClaudeMCP_Remote/tools/__init__.py" && exit 1)
-        test -f ClaudeMCP_Remote/tools/base.py || (echo "Missing ClaudeMCP_Remote/tools/base.py" && exit 1)
+        test -f ALiveMCP_Remote/__init__.py || (echo "Missing ALiveMCP_Remote/__init__.py" && exit 1)
+        test -f ALiveMCP_Remote/liveapi_tools.py || (echo "Missing ALiveMCP_Remote/liveapi_tools.py" && exit 1)
+        test -d ALiveMCP_Remote/tools || (echo "Missing ALiveMCP_Remote/tools/ directory" && exit 1)
+        test -f ALiveMCP_Remote/tools/__init__.py || (echo "Missing ALiveMCP_Remote/tools/__init__.py" && exit 1)
+        test -f ALiveMCP_Remote/tools/base.py || (echo "Missing ALiveMCP_Remote/tools/base.py" && exit 1)
         test -f install.sh || (echo "Missing install.sh" && exit 1)
         test -f README.md || (echo "Missing README.md" && exit 1)
         test -f LICENSE || (echo "Missing LICENSE" && exit 1)
@@ -29,8 +29,8 @@ jobs:
     - name: Validate Python syntax
       run: |
         echo "Checking Python 3.7+ syntax validity..."
-        python3 -m py_compile ClaudeMCP_Remote/liveapi_tools.py || (echo "Syntax error in liveapi_tools.py" && exit 1)
-        for f in ClaudeMCP_Remote/tools/*.py; do
+        python3 -m py_compile ALiveMCP_Remote/liveapi_tools.py || (echo "Syntax error in liveapi_tools.py" && exit 1)
+        for f in ALiveMCP_Remote/tools/*.py; do
           python3 -m py_compile "$f" || (echo "Syntax error in $f" && exit 1)
         done
         echo "✓ All Python files compile successfully"
@@ -39,7 +39,7 @@ jobs:
       run: |
         echo "Checking for common issues..."
         # Check that socket port is consistent
-        grep -q "9004" ClaudeMCP_Remote/__init__.py || (echo "Socket port 9004 not found in __init__.py" && exit 1)
+        grep -q "9004" ALiveMCP_Remote/__init__.py || (echo "Socket port 9004 not found in __init__.py" && exit 1)
         echo "✓ Configuration checks passed"
 
     - name: Validate documentation

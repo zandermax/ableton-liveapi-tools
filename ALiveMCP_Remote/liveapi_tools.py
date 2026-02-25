@@ -1,5 +1,5 @@
 """
-LiveAPI Tools Implementation for ClaudeMCP Remote Script
+LiveAPI Tools Implementation for ALiveMCP Remote Script
 Implements all LiveAPI operations for controlling Ableton Live
 
 Composed from domain-specific mixin modules in the tools/ sub-package.

@@ -1,23 +1,23 @@
 #!/bin/bash
-# Installation script for ClaudeMCP Remote Script
+# Installation script for ALiveMCP Remote Script
 # Automatically detects OS and installs to correct location
 
 set -e
 
-echo "ClaudeMCP Remote Script - Installation"
+echo "ALiveMCP Remote Script - Installation"
 echo "======================================="
 echo ""
 
 # Detect OS
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS
-    INSTALL_DIR="$HOME/Music/Ableton/User Library/Remote Scripts/ClaudeMCP_Remote"
+    INSTALL_DIR="$HOME/Music/Ableton/User Library/Remote Scripts/ALiveMCP_Remote"
 elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
     # Windows
-    INSTALL_DIR="$USERPROFILE/Documents/Ableton/User Library/Remote Scripts/ClaudeMCP_Remote"
+    INSTALL_DIR="$USERPROFILE/Documents/Ableton/User Library/Remote Scripts/ALiveMCP_Remote"
 else
     # Linux (assume similar to macOS structure)
-    INSTALL_DIR="$HOME/Music/Ableton/User Library/Remote Scripts/ClaudeMCP_Remote"
+    INSTALL_DIR="$HOME/Music/Ableton/User Library/Remote Scripts/ALiveMCP_Remote"
 fi
 
 echo "Target installation directory:"
@@ -44,8 +44,8 @@ if [ -d "$INSTALL_DIR" ]; then
 fi
 
 # Copy files
-echo "Installing ClaudeMCP Remote Script..."
-cp -r ClaudeMCP_Remote "$INSTALL_DIR"
+echo "Installing ALiveMCP Remote Script..."
+cp -r ALiveMCP_Remote "$INSTALL_DIR"
 
 # Verify installation
 if [ -f "$INSTALL_DIR/__init__.py" ] && [ -f "$INSTALL_DIR/liveapi_tools.py" ] && [ -d "$INSTALL_DIR/tools" ]; then
@@ -54,7 +54,7 @@ if [ -f "$INSTALL_DIR/__init__.py" ] && [ -f "$INSTALL_DIR/liveapi_tools.py" ] &
     echo ""
     echo "Next steps:"
     echo "1. Restart Ableton Live"
-    echo "2. The ClaudeMCP_Remote script will load automatically"
+    echo "2. The ALiveMCP_Remote script will load automatically"
     echo "3. Verify installation with: python3 examples/test_connection.py"
     echo ""
     echo "The Remote Script listens on TCP port 9004"

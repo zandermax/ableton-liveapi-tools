@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Basic usage examples for ClaudeMCP Remote Script
+Basic usage examples for ALiveMCP Remote Script
 Demonstrates common operations with Ableton Live
 """
 
@@ -10,7 +10,7 @@ import time
 
 
 def send_command(action, **params):
-    """Send command to ClaudeMCP Remote Script"""
+    """Send command to ALiveMCP Remote Script"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.settimeout(10)
     sock.connect(("127.0.0.1", 9004))
@@ -152,7 +152,7 @@ def example_5_scene_control():
 
 def main():
     print("=" * 80)
-    print("ClaudeMCP Remote Script - Basic Usage Examples")
+    print("ALiveMCP Remote Script - Basic Usage Examples")
     print("=" * 80)
     print()
 

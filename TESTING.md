@@ -21,11 +21,11 @@ pip install -r requirements-dev.txt
 pytest
 ```
 
-Coverage is reported automatically (`--cov=ClaudeMCP_Remote`). To see a
+Coverage is reported automatically (`--cov=ALiveMCP_Remote`). To see a
 per-file breakdown:
 
 ```bash
-pytest --cov=ClaudeMCP_Remote --cov-report=term-missing
+pytest --cov=ALiveMCP_Remote --cov-report=term-missing
 ```
 
 ### Test layout
@@ -33,7 +33,7 @@ pytest --cov=ClaudeMCP_Remote --cov-report=term-missing
 ```
 tests/
 ├── conftest.py               # Live module stub + shared fixtures (song, tools)
-├── test_claude_mcp.py        # Dispatch, PARAM_ALIASES, error handling
+├── test_alivemcp.py        # Dispatch, PARAM_ALIASES, error handling
 ├── test_session_transport.py # Session/transport tools
 ├── test_m4l_and_live12.py    # M4L and Live 12 tools
 └── ...
@@ -56,7 +56,7 @@ def test_my_new_tool(tools):
 ## Mock server
 
 `examples/mock_server.py` is a standalone TCP server that listens on
-`127.0.0.1:9004` — the same address as the real ClaudeMCP Remote Script.
+`127.0.0.1:9004` — the same address as the real ALiveMCP Remote Script.
 It speaks the identical newline-delimited JSON protocol, so any client works
 against it without Ableton running.
 
@@ -156,13 +156,13 @@ and transport buttons update state visible in subsequent responses.
 ### Port conflict
 
 The mock and the real Remote Script cannot both bind port 9004. If Ableton is
-already running with ClaudeMCP loaded, the mock will refuse to start:
+already running with ALiveMCP loaded, the mock will refuse to start:
 
 ```
 Error: cannot bind to 127.0.0.1:9004 — [Errno 48] Address already in use
 ```
 
-Disable the ClaudeMCP Remote Script in Ableton's preferences first, or free
+Disable the ALiveMCP Remote Script in Ableton's preferences first, or free
 the port:
 
 ```bash

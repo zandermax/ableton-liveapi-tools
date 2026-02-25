@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Test connection to ClaudeMCP Remote Script
+Test connection to ALiveMCP Remote Script
 Verifies the Remote Script is loaded and responsive
 """
 
@@ -11,7 +11,7 @@ import sys
 
 def send_command(action, timeout=5, **params):
     """
-    Send command to ClaudeMCP Remote Script
+    Send command to ALiveMCP Remote Script
 
     Args:
         action: Action name (e.g., 'health_check', 'ping')
@@ -54,7 +54,7 @@ def send_command(action, timeout=5, **params):
 
 def main():
     print("=" * 80)
-    print("ClaudeMCP Remote Script - Connection Test")
+    print("ALiveMCP Remote Script - Connection Test")
     print("=" * 80)
     print()
 
@@ -71,7 +71,7 @@ def main():
         print()
         print("Troubleshooting:")
         print("1. Ensure Ableton Live is running")
-        print("2. Verify ClaudeMCP_Remote is installed in Remote Scripts folder")
+        print("2. Verify ALiveMCP_Remote is installed in Remote Scripts folder")
         print("3. Check Ableton Live log for errors")
         sys.exit(1)
 
@@ -111,7 +111,7 @@ def main():
 
     print()
     print("=" * 80)
-    print("All tests passed - ClaudeMCP Remote Script is operational")
+    print("All tests passed - ALiveMCP Remote Script is operational")
     print("=" * 80)
 
 

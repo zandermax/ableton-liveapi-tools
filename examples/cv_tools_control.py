@@ -9,7 +9,7 @@ This example demonstrates how to:
 4. Animate CV LFO parameters in real-time
 
 Requirements:
-- Ableton Live running with ClaudeMCP Remote Script installed
+- Ableton Live running with ALiveMCP Remote Script installed
 - CV Tools Pack installed (optional, but recommended)
 - At least one track with a CV Tools device (e.g., CV LFO)
 """

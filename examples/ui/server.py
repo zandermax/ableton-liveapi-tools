@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Web dashboard bridge for ClaudeMCP Remote Script.
+Web dashboard bridge for ALiveMCP Remote Script.
 
 Serves index.html and proxies WebSocket messages to the Ableton TCP socket
 on 127.0.0.1:9004.
@@ -23,7 +23,7 @@ ABLETON_HOST = "127.0.0.1"
 ABLETON_PORT = 9004
 ABLETON_TIMEOUT = 5.0
 
-app = FastAPI(title="ClaudeMCP Web Dashboard")
+app = FastAPI(title="ALiveMCP Web Dashboard")
 
 _html_path = Path(__file__).parent / "index.html"
 
@@ -62,7 +62,7 @@ def _send_to_ableton(command: dict) -> dict:
     except socket.timeout:
         return {"ok": False, "error": "Connection timed out — is Ableton running?"}
     except ConnectionRefusedError:
-        return {"ok": False, "error": "Connection refused — is ClaudeMCP Remote Script loaded?"}
+        return {"ok": False, "error": "Connection refused — is ALiveMCP Remote Script loaded?"}
     except Exception as e:
         return {"ok": False, "error": str(e)}
 

@@ -2,7 +2,7 @@
 
 ## System Overview
 
-ClaudeMCP Remote Script implements a thread-safe TCP socket server within Ableton Live's Python environment, exposing LiveAPI functionality through a JSON-based request/response protocol.
+ALiveMCP Remote Script implements a thread-safe TCP socket server within Ableton Live's Python environment, exposing LiveAPI functionality through a JSON-based request/response protocol.
 
 ```mermaid
 graph TB
@@ -53,7 +53,7 @@ sequenceDiagram
 
 ## Core Components
 
-### 1. ClaudeMCP Class
+### 1. ALiveMCP Class
 
 Main Remote Script class loaded by Ableton Live.
 
@@ -337,7 +337,7 @@ graph TD
            return {"ok": False, "error": str(e)}
    ```
 
-2. Add dispatcher in `ClaudeMCP._process_command()` (`__init__.py`):
+2. Add dispatcher in `ALiveMCP._process_command()` (`__init__.py`):
    ```python
    elif action == 'new_tool':
        return self.tools.new_tool(

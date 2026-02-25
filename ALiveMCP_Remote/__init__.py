@@ -1,5 +1,5 @@
 """
-ClaudeMCP Remote Script - Thread-Safe Socket Server for LiveAPI Communication
+ALiveMCP Remote Script - Thread-Safe Socket Server for LiveAPI Communication
 Ableton Live Remote Script that receives commands via TCP port 9004
 and executes LiveAPI operations in the main thread using a queue-based approach.
 
@@ -7,9 +7,9 @@ Author: Claude Code
 License: GPL-3.0
 """
 
-__version__ = "1.1.3"
+__version__ = "1.2.0"
 
-import socket  # noqa: F401 - re-exported so tests can patch ClaudeMCP_Remote.socket
+import socket  # noqa: F401 - re-exported so tests can patch ALiveMCP_Remote.socket
 import threading
 import traceback
 
@@ -42,7 +42,7 @@ PARAM_ALIASES = {
 }
 
 
-class ClaudeMCP(SocketServerMixin):
+class ALiveMCP(SocketServerMixin):
     """
     Main Remote Script class loaded by Ableton Live
 
@@ -75,12 +75,12 @@ class ClaudeMCP(SocketServerMixin):
 
         self.start_socket_server()
 
-        self.log("ClaudeMCP Remote Script initialized (Queue-based, Thread-Safe)")
+        self.log("ALiveMCP Remote Script initialized (Queue-based, Thread-Safe)")
         self.log("Socket server listening on port " + str(PORT))
 
     def log(self, message):
         """Log message to Ableton's Log.txt"""
-        self.c_instance.log_message("[ClaudeMCP] " + str(message))
+        self.c_instance.log_message("[ALiveMCP] " + str(message))
 
     def _process_command(self, command):
         """
@@ -97,14 +97,14 @@ class ClaudeMCP(SocketServerMixin):
                 return {
                     "ok": True,
                     "message": "pong (queue-based, thread-safe)",
-                    "script": "ClaudeMCP_Remote",
+                    "script": "ALiveMCP_Remote",
                     "version": __version__,
                 }
 
             if action == "health_check":
                 return {
                     "ok": True,
-                    "message": "ClaudeMCP Remote Script running (thread-safe)",
+                    "message": "ALiveMCP Remote Script running (thread-safe)",
                     "version": __version__,
                     "tool_count": len(self.tools.get_available_tools()),
                     "ableton_version": str(Live.Application.get_application().get_major_version()),
@@ -172,7 +172,7 @@ class ClaudeMCP(SocketServerMixin):
 
     def disconnect(self):
         """Called when the script is unloaded"""
-        self.log("Shutting down ClaudeMCP Remote Script...")
+        self.log("Shutting down ALiveMCP Remote Script...")
         self.running = False
 
         if self.socket_server:
@@ -181,10 +181,10 @@ class ClaudeMCP(SocketServerMixin):
             except Exception:
                 pass
 
-        self.log("ClaudeMCP Remote Script stopped")
+        self.log("ALiveMCP Remote Script stopped")
 
 
 # Required entry points for Ableton
 def create_instance(c_instance):
     """Factory function called by Live to create the script instance"""
-    return ClaudeMCP(c_instance)
+    return ALiveMCP(c_instance)

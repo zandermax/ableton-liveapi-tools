@@ -2,7 +2,7 @@
 
 ## What This Project Is
 
-ClaudeMCP Remote Script is an Ableton Live Remote Script (Python) that exposes **220 LiveAPI tools** over a TCP socket on `127.0.0.1:9004`. Clients send newline-delimited JSON commands and receive JSON responses. The project is designed for use with AI agents (including Claude via MCP), algorithmic composition tools, and any external software that needs to control Ableton Live programmatically.
+ALiveMCP Remote Script is an Ableton Live Remote Script (Python) that exposes **220 LiveAPI tools** over a TCP socket on `127.0.0.1:9004`. Clients send newline-delimited JSON commands and receive JSON responses. The project is designed for use with AI agents (including Claude via MCP), algorithmic composition tools, and any external software that needs to control Ableton Live programmatically.
 
 ---
 
@@ -10,8 +10,8 @@ ClaudeMCP Remote Script is an Ableton Live Remote Script (Python) that exposes *
 
 ```
 ableton-liveapi-tools/
-├── ClaudeMCP_Remote/          # The Remote Script package — installed into Ableton
-│   ├── __init__.py            # Entry point: ClaudeMCP class + create_instance()
+├── ALiveMCP_Remote/          # The Remote Script package — installed into Ableton
+│   ├── __init__.py            # Entry point: ALiveMCP class + create_instance()
 │   ├── liveapi_tools.py       # LiveAPITools: composes all mixin classes
 │   ├── socket_server.py       # SocketServerMixin: TCP listener on port 9004
 │   └── tools/                 # 30 domain-specific mixin modules
@@ -69,7 +69,7 @@ Key constraint: **All LiveAPI calls must execute on the main thread** (the one t
 
 ## How to Add a New Tool
 
-1. **Implement the method** in the appropriate mixin file under `ClaudeMCP_Remote/tools/`. Follow the existing pattern — wrap everything in `try/except` and return `{"ok": True, ...}` or `{"ok": False, "error": str(e)}`. Keep files under **300 lines** (the pre-commit hook enforces this; create a new mixin if needed).
+1. **Implement the method** in the appropriate mixin file under `ALiveMCP_Remote/tools/`. Follow the existing pattern — wrap everything in `try/except` and return `{"ok": True, ...}` or `{"ok": False, "error": str(e)}`. Keep files under **300 lines** (the pre-commit hook enforces this; create a new mixin if needed).
 
    ```python
    def my_new_tool(self, track_index, some_param):
@@ -82,9 +82,9 @@ Key constraint: **All LiveAPI calls must execute on the main thread** (the one t
            return {"ok": False, "error": str(e)}
    ```
 
-2. **Register the name** in `ClaudeMCP_Remote/tools/registry.py` by adding the method name string to `AVAILABLE_TOOLS`.
+2. **Register the name** in `ALiveMCP_Remote/tools/registry.py` by adding the method name string to `AVAILABLE_TOOLS`.
 
-3. **Dispatch is automatic.** `ClaudeMCP._process_command()` uses `getattr(self.tools, action, None)` — no dispatcher switch-case needed.
+3. **Dispatch is automatic.** `ALiveMCP._process_command()` uses `getattr(self.tools, action, None)` — no dispatcher switch-case needed.
 
 4. **Write tests** in the `tests/` directory following the existing pattern. The `Live` module is mocked via `tests/conftest.py`.
 
@@ -97,11 +97,11 @@ Key constraint: **All LiveAPI calls must execute on the main thread** (the one t
 | Constraint | Detail |
 |---|---|
 | **Main thread only** | Never call `self.song.*` from a socket thread. Use the queue. |
-| **300-line limit** | Each `.py` file in `ClaudeMCP_Remote/` must be ≤ 300 lines. Many files are already near the limit — split into a new mixin if needed. |
+| **300-line limit** | Each `.py` file in `ALiveMCP_Remote/` must be ≤ 300 lines. Many files are already near the limit — split into a new mixin if needed. |
 | **Python 2.7 compatible syntax** | Ableton Live bundles Python 2.7. Avoid f-strings, type annotations, walrus operators, and other Python 3-only syntax. (The few existing f-strings in the codebase are in locations where Live 11+ ships Python 3.) |
 | **No external dependencies** | The Remote Script runs inside Ableton's bundled Python. Standard library only — no `pip install`. |
 | **Localhost only** | The socket binds to `127.0.0.1`, not `0.0.0.0`. Remote access requires an SSH tunnel or explicit reconfiguration. |
-| **`scene_index` alias** | For clip-slot operations (`create_midi_clip`, `delete_clip`, `duplicate_clip`, `launch_clip`, `stop_clip`, `get_clip_info`, `set_clip_name`, `add_notes`), the canonical parameter is `clip_index`. Legacy clients sending `scene_index` are still supported via `PARAM_ALIASES` in `ClaudeMCP_Remote/__init__.py`. **Do not remove this alias** — it is part of the public API. |
+| **`scene_index` alias** | For clip-slot operations (`create_midi_clip`, `delete_clip`, `duplicate_clip`, `launch_clip`, `stop_clip`, `get_clip_info`, `set_clip_name`, `add_notes`), the canonical parameter is `clip_index`. Legacy clients sending `scene_index` are still supported via `PARAM_ALIASES` in `ALiveMCP_Remote/__init__.py`. **Do not remove this alias** — it is part of the public API. |
 
 ---
 
@@ -130,4 +130,4 @@ Messages are newline-delimited (`\n`), UTF-8 encoded.
 
 See [`docs/API_REFERENCE.md`](docs/API_REFERENCE.md) for all 220 tools with parameters and response fields.
 
-For a quick list of tool names only, see [`ClaudeMCP_Remote/tools/registry.py`](ClaudeMCP_Remote/tools/registry.py).
+For a quick list of tool names only, see [`ALiveMCP_Remote/tools/registry.py`](ALiveMCP_Remote/tools/registry.py).

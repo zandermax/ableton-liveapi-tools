@@ -1,4 +1,4 @@
-# ClaudeMCP Remote Script for Ableton Live
+# ALiveMCP Remote Script for Ableton Live
 
 A comprehensive Python Remote Script for Ableton Live that exposes **220 LiveAPI tools** via a simple TCP socket interface. Control every aspect of your Ableton Live session programmatically - from playback and recording to tracks, clips, devices, MIDI notes, and Max for Live / CV Tools devices.
 
@@ -112,7 +112,7 @@ This implementation provides **220 tools across 44 categories** based on:
    Or manually copy to Ableton's Remote Scripts folder:
    ```bash
    # macOS
-   cp -r ClaudeMCP_Remote ~/Music/Ableton/User\ Library/Remote\ Scripts/
+   cp -r ALiveMCP_Remote ~/Music/Ableton/User\ Library/Remote\ Scripts/
 
    # Windows
    # Copy to: %USERPROFILE%\Documents\Ableton\User Library\Remote Scripts\

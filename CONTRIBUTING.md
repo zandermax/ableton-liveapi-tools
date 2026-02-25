@@ -1,4 +1,4 @@
-# Contributing to Ableton LiveAPI Tools
+# Contributing to ALiveMCP
 
 Thank you for your interest in contributing! This document provides guidelines for contributing to the project.
 
@@ -85,32 +85,32 @@ make install-dev
 
 # Create a symlink to Ableton's Remote Scripts directory
 # macOS
-ln -s "$(pwd)/ClaudeMCP_Remote" "$HOME/Music/Ableton/User Library/Remote Scripts/ClaudeMCP_Remote"
+ln -s "$(pwd)/ALiveMCP_Remote" "$HOME/Music/Ableton/User Library/Remote Scripts/ALiveMCP_Remote"
 
 # Windows (run as Administrator)
-mklink /D "%USERPROFILE%\Documents\Ableton\User Library\Remote Scripts\ClaudeMCP_Remote" "%CD%\ClaudeMCP_Remote"
+mklink /D "%USERPROFILE%\Documents\Ableton\User Library\Remote Scripts\ALiveMCP_Remote" "%CD%\ALiveMCP_Remote"
 
 # Linux
-ln -s "$(pwd)/ClaudeMCP_Remote" "$HOME/.ableton/User Library/Remote Scripts/ClaudeMCP_Remote"
+ln -s "$(pwd)/ALiveMCP_Remote" "$HOME/.ableton/User Library/Remote Scripts/ALiveMCP_Remote"
 ```
 
 ### Dev Commands
 
 All common tasks are available via `make`. Run `make help` to see the full list.
 
-| Command | Description |
-|---|---|
-| `make install-dev` | Install dev dependencies (pytest, ruff, etc.) |
-| `make lint` | Run ruff linter |
-| `make lint-fix` | Run ruff linter and auto-fix issues |
-| `make format` | Format code with ruff |
-| `make format-check` | Check formatting without writing files |
-| `make test` | Run pytest with coverage |
-| `make test-cov` | Run pytest with per-file coverage breakdown |
-| `make check-length` | Check all `.py` files are ≤ 300 lines |
-| `make mock` | Start mock Ableton server on port 9004 |
-| `make ui` | Start web dashboard on port 8080 |
-| `make ci` | Run all checks (lint, format-check, test, check-length) |
+| Command             | Description                                             |
+| ------------------- | ------------------------------------------------------- |
+| `make install-dev`  | Install dev dependencies (pytest, ruff, etc.)           |
+| `make lint`         | Run ruff linter                                         |
+| `make lint-fix`     | Run ruff linter and auto-fix issues                     |
+| `make format`       | Format code with ruff                                   |
+| `make format-check` | Check formatting without writing files                  |
+| `make test`         | Run pytest with coverage                                |
+| `make test-cov`     | Run pytest with per-file coverage breakdown             |
+| `make check-length` | Check all `.py` files are ≤ 300 lines                   |
+| `make mock`         | Start mock Ableton server on port 9004                  |
+| `make ui`           | Start web dashboard on port 8080                        |
+| `make ci`           | Run all checks (lint, format-check, test, check-length) |
 
 ### Testing Changes
 
@@ -121,6 +121,7 @@ All common tasks are available via `make`. Run `make help` to see the full list.
    - Linux: `~/.ableton/Live <version>/Preferences/Log.txt`
 
 3. **Test TCP socket**:
+
    ```bash
    # Test connection
    nc localhost 9004
@@ -138,7 +139,7 @@ All common tasks are available via `make`. Run `make help` to see the full list.
 ## Project Structure
 
 ```
-ClaudeMCP_Remote/
+ALiveMCP_Remote/
 ├── __init__.py          # Main Remote Script entry point
 └── liveapi_tools.py     # 220 LiveAPI tools implementation
 
@@ -160,6 +161,7 @@ install.sh              # Installation script
 To add a new LiveAPI tool:
 
 1. **Add tool definition** to `tools_config.py`:
+
    ```python
    {
        "name": "tool_name",
@@ -175,6 +177,7 @@ To add a new LiveAPI tool:
    ```
 
 2. **Implement tool handler** in `liveapi_tools.py`:
+
    ```python
    def handle_tool_name(self, params):
        """Tool description.
@@ -193,6 +196,7 @@ To add a new LiveAPI tool:
    ```
 
 3. **Add to tool routing** in `process_request`:
+
    ```python
    elif tool_name == "tool_name":
        return self.handle_tool_name(params)
@@ -227,6 +231,7 @@ Ableton Live uses Python 2.7, so ensure compatibility:
 ## Recognition
 
 Contributors will be recognized in:
+
 - GitHub contributors page
 - Release notes for significant contributions
 - README.md acknowledgments section

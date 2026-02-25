@@ -1,6 +1,6 @@
 # API Reference
 
-Complete reference for all 220 tools exposed by the ClaudeMCP Remote Script over TCP port 9004.
+Complete reference for all 220 tools exposed by the ALiveMCP Remote Script over TCP port 9004.
 
 ## How to Use This Reference
 
@@ -83,7 +83,7 @@ Check that the Remote Script is running.
 **Response:**
 - `ok`: true
 - `message`: `"pong (queue-based, thread-safe)"`
-- `script`: `"ClaudeMCP_Remote"`
+- `script`: `"ALiveMCP_Remote"`
 - `version`: version string
 
 ---

@@ -1,6 +1,6 @@
 # Troubleshooting
 
-Solutions for common problems with the ClaudeMCP Remote Script.
+Solutions for common problems with the ALiveMCP Remote Script.
 
 ---
 
@@ -10,13 +10,13 @@ Solutions for common problems with the ClaudeMCP Remote Script.
 
 **Causes and fixes:**
 
-1. **Wrong folder.** The `ClaudeMCP_Remote/` directory must be placed directly inside Ableton's Remote Scripts folder, not inside a sub-folder.
-   - macOS: `~/Music/Ableton/User Library/Remote Scripts/ClaudeMCP_Remote/`
-   - Windows: `%USERPROFILE%\Documents\Ableton\User Library\Remote Scripts\ClaudeMCP_Remote\`
+1. **Wrong folder.** The `ALiveMCP_Remote/` directory must be placed directly inside Ableton's Remote Scripts folder, not inside a sub-folder.
+   - macOS: `~/Music/Ableton/User Library/Remote Scripts/ALiveMCP_Remote/`
+   - Windows: `%USERPROFILE%\Documents\Ableton\User Library\Remote Scripts\ALiveMCP_Remote\`
 
 2. **Missing `__init__.py`.** The folder must contain `__init__.py` with the `create_instance` function. Verify it exists:
    ```
-   ClaudeMCP_Remote/
+   ALiveMCP_Remote/
    ├── __init__.py      ← required
    ├── liveapi_tools.py
    └── ...
@@ -34,9 +34,9 @@ Solutions for common problems with the ClaudeMCP Remote Script.
 
 **Causes and fixes:**
 
-1. **Script not selected.** Open Ableton Preferences → Link/Tempo/MIDI → Control Surfaces. Select `ClaudeMCP_Remote` from the drop-down. Restart Ableton if needed.
+1. **Script not selected.** Open Ableton Preferences → Link/Tempo/MIDI → Control Surfaces. Select `ALiveMCP_Remote` from the drop-down. Restart Ableton if needed.
 
-2. **Script crashed at startup.** Check `Log.txt` for `[ClaudeMCP]` errors. A failed import (e.g. missing file) will prevent the socket from opening.
+2. **Script crashed at startup.** Check `Log.txt` for `[ALiveMCP]` errors. A failed import (e.g. missing file) will prevent the socket from opening.
 
 3. **Wrong port.** The script listens on `9004` by default. Confirm your client is connecting to `127.0.0.1:9004`.
 
@@ -133,14 +133,14 @@ if info['major_version'] >= 12:
 
 ## Reading the Log
 
-Ableton writes Remote Script output to its log file. Errors are prefixed with `[ClaudeMCP]`.
+Ableton writes Remote Script output to its log file. Errors are prefixed with `[ALiveMCP]`.
 
 - **macOS:** `~/Library/Preferences/Ableton/Live x.x.x/Log.txt`
 - **Windows:** `%APPDATA%\Ableton\Live x.x.x\Preferences\Log.txt`
 
 Tail the log while reproducing an issue:
 ```bash
-tail -f ~/Library/Preferences/Ableton/Live\ 12*/Log.txt | grep ClaudeMCP
+tail -f ~/Library/Preferences/Ableton/Live\ 12*/Log.txt | grep ALiveMCP
 ```
 
 ---
@@ -154,7 +154,7 @@ python3 examples/test_connection.py
 
 Expected output:
 ```
-Connected to ClaudeMCP Remote Script
+Connected to ALiveMCP Remote Script
 Version: x.x.x
 Tool count: 220
 ```

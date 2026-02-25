@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes how to interact with Max for Live (M4L) devices, including CV Tools, through the ClaudeMCP Remote Script.
+This document describes how to interact with Max for Live (M4L) devices, including CV Tools, through the ALiveMCP Remote Script.
 
 **The Remote Script includes 5 M4L-specific tools** that provide simplified access to Max for Live devices using parameter names instead of indices.
 
@@ -323,7 +323,7 @@ else:
 
 ## Implementation Details
 
-### How Device Detection Works (ClaudeMCP_Remote/liveapi_tools.py:2164-2318)
+### How Device Detection Works (ALiveMCP_Remote/liveapi_tools.py:2164-2318)
 
 The implementation uses LiveAPI's device introspection:
 
@@ -352,7 +352,7 @@ for i, param in enumerate(device.parameters):
 
 ## Summary
 
-The ClaudeMCP Remote Script provides **complete M4L support** through 5 specialized tools:
+The ALiveMCP Remote Script provides **complete M4L support** through 5 specialized tools:
 
 ✅ **Implemented (5 tools):**
 1. `is_max_device` - Check if device is M4L

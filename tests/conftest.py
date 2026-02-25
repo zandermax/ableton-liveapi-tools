@@ -42,6 +42,6 @@ def c_instance():
 @pytest.fixture
 def tools(song, c_instance):
     """A fully-constructed LiveAPITools instance backed by mock objects."""
-    from ClaudeMCP_Remote.liveapi_tools import LiveAPITools
+    from ALiveMCP_Remote.liveapi_tools import LiveAPITools
 
     return LiveAPITools(song, c_instance)

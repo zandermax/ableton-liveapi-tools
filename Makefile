@@ -42,7 +42,7 @@ test:
 	pytest
 
 test-cov:
-	pytest --cov=ClaudeMCP_Remote --cov-report=term-missing
+	pytest --cov=ALiveMCP_Remote --cov-report=term-missing
 
 check-length:
 	python scripts/check_file_length.py

@@ -4,8 +4,8 @@ Tests for core package behaviour: version format and the base logging mixin.
 
 from unittest.mock import MagicMock
 
-from ClaudeMCP_Remote import __version__
-from ClaudeMCP_Remote.tools.base import BaseMixin
+from ALiveMCP_Remote import __version__
+from ALiveMCP_Remote.tools.base import BaseMixin
 
 
 def test_version_is_semver():

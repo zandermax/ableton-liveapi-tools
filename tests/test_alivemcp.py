@@ -1,5 +1,5 @@
 """
-Tests for ClaudeMCP: socket server lifecycle, command dispatch, queue processing,
+Tests for ALiveMCP: socket server lifecycle, command dispatch, queue processing,
 lifecycle stubs, and the create_instance factory.
 """
 
@@ -9,17 +9,17 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from ClaudeMCP_Remote import ClaudeMCP, __version__, create_instance
+from ALiveMCP_Remote import ALiveMCP, __version__, create_instance
 
 # ---------------------------------------------------------------------------
-# Fixture: a ClaudeMCP instance with socket and thread mocked out
+# Fixture: a ALiveMCP instance with socket and thread mocked out
 # ---------------------------------------------------------------------------
 
 
 @pytest.fixture
 def mcp(c_instance):
-    with patch("ClaudeMCP_Remote.socket.socket"), patch("ClaudeMCP_Remote.threading.Thread"):
-        instance = ClaudeMCP(c_instance)
+    with patch("ALiveMCP_Remote.socket.socket"), patch("ALiveMCP_Remote.threading.Thread"):
+        instance = ALiveMCP(c_instance)
     return instance
 
 
@@ -29,14 +29,14 @@ def mcp(c_instance):
 
 
 def test_init_sets_c_instance_and_song(c_instance):
-    with patch("ClaudeMCP_Remote.socket.socket"), patch("ClaudeMCP_Remote.threading.Thread"):
-        instance = ClaudeMCP(c_instance)
+    with patch("ALiveMCP_Remote.socket.socket"), patch("ALiveMCP_Remote.threading.Thread"):
+        instance = ALiveMCP(c_instance)
     assert instance.c_instance is c_instance
     assert instance.song is c_instance.song()
 
 
 def test_init_creates_tools(mcp):
-    from ClaudeMCP_Remote.liveapi_tools import LiveAPITools
+    from ALiveMCP_Remote.liveapi_tools import LiveAPITools
 
     assert isinstance(mcp.tools, LiveAPITools)
 
@@ -48,21 +48,21 @@ def test_init_creates_queues(mcp):
 
 
 def test_init_starts_socket_server(c_instance):
-    with patch("ClaudeMCP_Remote.socket.socket") as mock_sock_cls, patch(
-        "ClaudeMCP_Remote.threading.Thread"
+    with patch("ALiveMCP_Remote.socket.socket") as mock_sock_cls, patch(
+        "ALiveMCP_Remote.threading.Thread"
     ) as mock_thread_cls:
-        ClaudeMCP(c_instance)
+        ALiveMCP(c_instance)
     mock_sock_cls.assert_called_once()
     mock_thread_cls.assert_called_once()
 
 
 def test_start_socket_server_logs_error_on_exception(c_instance):
     """If socket binding fails the error is logged, not raised."""
-    with patch("ClaudeMCP_Remote.socket.socket") as mock_sock_cls, patch(
-        "ClaudeMCP_Remote.threading.Thread"
+    with patch("ALiveMCP_Remote.socket.socket") as mock_sock_cls, patch(
+        "ALiveMCP_Remote.threading.Thread"
     ):
         mock_sock_cls.return_value.bind.side_effect = OSError("address in use")
-        instance = ClaudeMCP(c_instance)
+        instance = ALiveMCP(c_instance)
     # The error should have been logged; the script still initialises.
     assert instance is not None
     c_instance.log_message.assert_called()
@@ -75,12 +75,12 @@ def test_start_socket_server_logs_error_on_exception(c_instance):
 
 def test_log_prefixes_message(mcp, c_instance):
     mcp.log("test message")
-    c_instance.log_message.assert_called_with("[ClaudeMCP] test message")
+    c_instance.log_message.assert_called_with("[ALiveMCP] test message")
 
 
 def test_log_converts_non_string(mcp, c_instance):
     mcp.log(42)
-    c_instance.log_message.assert_called_with("[ClaudeMCP] 42")
+    c_instance.log_message.assert_called_with("[ALiveMCP] 42")
 
 
 # ---------------------------------------------------------------------------
@@ -92,7 +92,7 @@ def test_process_command_ping(mcp):
     result = mcp._process_command({"action": "ping"})
     assert result["ok"] is True
     assert result["message"] == "pong (queue-based, thread-safe)"
-    assert result["script"] == "ClaudeMCP_Remote"
+    assert result["script"] == "ALiveMCP_Remote"
     assert result["version"] == __version__
 
 
@@ -243,9 +243,9 @@ def test_disconnect_handles_socket_close_error(mcp):
 
 
 def test_create_instance_returns_claude_mcp(c_instance):
-    with patch("ClaudeMCP_Remote.socket.socket"), patch("ClaudeMCP_Remote.threading.Thread"):
+    with patch("ALiveMCP_Remote.socket.socket"), patch("ALiveMCP_Remote.threading.Thread"):
         instance = create_instance(c_instance)
-    assert isinstance(instance, ClaudeMCP)
+    assert isinstance(instance, ALiveMCP)
 
 
 # ---------------------------------------------------------------------------
@@ -275,7 +275,7 @@ def test_socket_listener_spawns_thread_per_connection(mcp):
     mcp.socket_server = MagicMock()
     mcp.socket_server.accept.side_effect = accept_side_effect
 
-    with patch("ClaudeMCP_Remote.threading.Thread") as mock_thread_cls:
+    with patch("ALiveMCP_Remote.threading.Thread") as mock_thread_cls:
         mock_thread_cls.return_value = MagicMock()
         mcp._socket_listener()
 
@@ -352,7 +352,7 @@ def test_handle_client_response_timeout(mcp):
     mock_client.recv.side_effect = [json_message.encode(), b""]
 
     # Patch the response queue's get() to immediately raise queue.Empty
-    with patch("ClaudeMCP_Remote.queue.Queue.get", side_effect=queue.Empty):
+    with patch("ALiveMCP_Remote.queue.Queue.get", side_effect=queue.Empty):
         mcp._handle_client(mock_client)
 
     mock_client.sendall.assert_called_once()

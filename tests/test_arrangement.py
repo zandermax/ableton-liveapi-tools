@@ -11,7 +11,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-import ClaudeMCP_Remote.tools.arrangement as arrangement_module
+import ALiveMCP_Remote.tools.arrangement as arrangement_module
 
 # ---------------------------------------------------------------------------
 # get_project_root_folder

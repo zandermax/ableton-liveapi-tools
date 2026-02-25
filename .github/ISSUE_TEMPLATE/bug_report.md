@@ -11,7 +11,7 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
-1. Start Ableton Live with ClaudeMCP Remote Script installed
+1. Start Ableton Live with ALiveMCP Remote Script installed
 2. Run command '...'
 3. Send request '...'
 4. See error
@@ -29,7 +29,7 @@ Paste error output here
 **Environment:**
 - Ableton Live version: [e.g. Live 12.0.5]
 - Operating System: [e.g. macOS 14.2, Windows 11]
-- ClaudeMCP version: [e.g. v1.0.0]
+- ALiveMCP version: [e.g. v1.0.0]
 - Python version: [if known]
 
 **Additional context**
