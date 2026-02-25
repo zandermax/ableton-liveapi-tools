@@ -80,6 +80,9 @@ Use the feature request template when suggesting features.
 git clone https://github.com/YOUR_USERNAME/ableton-liveapi-tools.git
 cd ableton-liveapi-tools
 
+# Install dev dependencies
+make install-dev
+
 # Create a symlink to Ableton's Remote Scripts directory
 # macOS
 ln -s "$(pwd)/ClaudeMCP_Remote" "$HOME/Music/Ableton/User Library/Remote Scripts/ClaudeMCP_Remote"
@@ -90,6 +93,24 @@ mklink /D "%USERPROFILE%\Documents\Ableton\User Library\Remote Scripts\ClaudeMCP
 # Linux
 ln -s "$(pwd)/ClaudeMCP_Remote" "$HOME/.ableton/User Library/Remote Scripts/ClaudeMCP_Remote"
 ```
+
+### Dev Commands
+
+All common tasks are available via `make`. Run `make help` to see the full list.
+
+| Command | Description |
+|---|---|
+| `make install-dev` | Install dev dependencies (pytest, ruff, etc.) |
+| `make lint` | Run ruff linter |
+| `make lint-fix` | Run ruff linter and auto-fix issues |
+| `make format` | Format code with ruff |
+| `make format-check` | Check formatting without writing files |
+| `make test` | Run pytest with coverage |
+| `make test-cov` | Run pytest with per-file coverage breakdown |
+| `make check-length` | Check all `.py` files are ≤ 300 lines |
+| `make mock` | Start mock Ableton server on port 9004 |
+| `make ui` | Start web dashboard on port 8080 |
+| `make ci` | Run all checks (lint, format-check, test, check-length) |
 
 ### Testing Changes
 
