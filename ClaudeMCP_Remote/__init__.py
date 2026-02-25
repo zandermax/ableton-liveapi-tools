@@ -7,9 +7,9 @@ Author: Claude Code
 License: MIT
 """
 
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 
-import socket  # noqa: F401 – re-exported so tests can patch ClaudeMCP_Remote.socket
+import socket  # noqa: F401 - re-exported so tests can patch ClaudeMCP_Remote.socket
 import threading
 import traceback
 

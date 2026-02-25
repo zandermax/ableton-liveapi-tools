@@ -84,7 +84,7 @@ def test_log_converts_non_string(mcp, c_instance):
 
 
 # ---------------------------------------------------------------------------
-# _process_command – built-in actions
+# _process_command - built-in actions
 # ---------------------------------------------------------------------------
 
 
@@ -115,7 +115,7 @@ def test_process_command_unknown_action(mcp):
 def test_process_command_dispatches_to_tools(mcp):
     mcp.tools.ping = MagicMock(return_value={"ok": True, "custom": "value"})
     result = mcp._process_command({"action": "ping"})
-    # ping is handled before getattr dispatch – ensure built-in takes priority
+    # ping is handled before getattr dispatch - ensure built-in takes priority
     assert result["ok"] is True
 
     # Test a real tool dispatch
@@ -140,7 +140,7 @@ def test_process_command_exception_returns_error_with_traceback(mcp):
 
 
 # ---------------------------------------------------------------------------
-# update_display – queue processing
+# update_display - queue processing
 # ---------------------------------------------------------------------------
 
 
@@ -179,7 +179,7 @@ def test_update_display_caps_at_five_commands_per_tick(mcp):
 def test_update_display_skips_missing_response_queue(mcp):
     """Command whose response queue was already cleaned up should not raise."""
     mcp.command_queue.put((999, {"action": "ping"}))
-    # No entry in response_queues for id 999 – should not blow up
+    # No entry in response_queues for id 999 - should not blow up
     mcp.update_display()
 
 

@@ -149,7 +149,7 @@ def test_set_tempo_too_high(tools):
 
 def test_set_tempo_exception(tools, song):
     song.tempo = MagicMock(side_effect=Exception("err"))
-    # Assignment raises because it's a MagicMock attribute – can't easily force;
+    # Assignment raises because it's a MagicMock attribute - can't easily force;
     # instead test via invalid float conversion:
     result = tools.set_tempo("not-a-number")
     assert result["ok"] is False
