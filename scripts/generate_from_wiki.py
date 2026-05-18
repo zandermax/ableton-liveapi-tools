@@ -114,32 +114,102 @@ def build_manifest(available, code_tools, wiki_pages):
 
 def write_outputs(manifest, output_dir, manifest_path, apply):
     data = list(manifest.values())
+    # Stable JSON text for outputs
+    json_text = lambda v: json.dumps(v, indent=2, sort_keys=True, ensure_ascii=False)
+
+    full_path = os.path.join(output_dir, "full.json")
+
     if apply:
         os.makedirs(output_dir, exist_ok=True)
-        full_path = os.path.join(output_dir, "full.json")
         with open(full_path, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=2, sort_keys=True)
+            f.write(json_text(data))
         if manifest_path:
+            os.makedirs(os.path.dirname(manifest_path), exist_ok=True)
             with open(manifest_path, "w", encoding="utf-8") as f:
-                json.dump({"tools": data}, f, indent=2, sort_keys=True)
+                f.write(json_text({"tools": data}))
         print("Wrote outputs to", output_dir)
-    else:
-        print(json.dumps({"tools": data}, indent=2)[:32768])
+        return True
+
+    # Check mode: compare generated data to existing artifact files and report mismatches
+    if not os.path.exists(full_path):
+        print("Missing expected output file:", full_path, file=sys.stderr)
+        return False
+
+    try:
+        with open(full_path, encoding="utf-8") as f:
+            existing = json.load(f)
+    except Exception as e:
+        print(f"Error reading {full_path}: {e}", file=sys.stderr)
+        return False
+
+    if existing != data:
+        print("Mismatch between generated data and existing mcp_tool_defs/full.json", file=sys.stderr)
+        print("Generated tools:", len(data), "Existing tools:", len(existing), file=sys.stderr)
+        return False
+
+    if manifest_path:
+        if not os.path.exists(manifest_path):
+            print("Missing expected manifest file:", manifest_path, file=sys.stderr)
+            return False
+        try:
+            with open(manifest_path, encoding="utf-8") as f:
+                existing_manifest = json.load(f)
+        except Exception as e:
+            print(f"Error reading {manifest_path}: {e}", file=sys.stderr)
+            return False
+        existing_tools = existing_manifest.get("tools")
+        if existing_tools is None:
+            print("Manifest missing 'tools' key:", manifest_path, file=sys.stderr)
+            return False
+
+        # Compare by tool name only to allow different manifest schemas
+        existing_names = []
+        for t in existing_tools:
+            if isinstance(t, dict):
+                existing_names.append(t.get("name"))
+            elif isinstance(t, (list, tuple)) and t:
+                # older formats may be [name, desc, schema]
+                existing_names.append(t[0])
+
+        generated_names = [e.get("name") for e in data]
+        if set(existing_names) != set(generated_names):
+            missing = sorted(set(generated_names) - set(existing_names))
+            extra = sorted(set(existing_names) - set(generated_names))
+            print("Mismatch between generated tool names and manifest file:", manifest_path, file=sys.stderr)
+            if missing:
+                print("  Missing in manifest:", ", ".join(missing), file=sys.stderr)
+            if extra:
+                print("  Extra in manifest:", ", ".join(extra), file=sys.stderr)
+            return False
+
+    print("OK: generated outputs match existing artifacts")
+    return True
 
 
 def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-dir", default="mcp_tool_defs")
     parser.add_argument("--manifest", default="docs/tool_manifest.json")
-    parser.add_argument("--check", action="store_true", help="Alias for dry-run (no --apply).")
-    parser.add_argument("--apply", action="store_true")
+    parser.add_argument("--check", action="store_true", help="Dry-run (no --apply).")
+    parser.add_argument("--apply", action="store_true", help="Write generated artifacts to disk.")
     args = parser.parse_args(argv)
+
+    # Default to check mode when neither --check nor --apply provided
+    if not args.check and not args.apply:
+        args.check = True
 
     if args.check and args.apply:
         print("Cannot use --check with --apply", file=sys.stderr)
-        return 2
+        sys.exit(2)
 
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # Treat relative output paths as relative to the repo root so --apply writes
+    # the committed artifacts in the repository rather than the current CWD.
+    if not os.path.isabs(args.output_dir):
+        args.output_dir = os.path.join(repo_root, args.output_dir)
+    if args.manifest and not os.path.isabs(args.manifest):
+        args.manifest = os.path.join(repo_root, args.manifest)
+
     registry_path = os.path.join(repo_root, "ALiveMCP_Remote", "tools", "core", "registry.py")
     tools_root = os.path.join(repo_root, "ALiveMCP_Remote", "tools")
     wiki_root = os.path.join(repo_root, "docs", "wiki", "tools")
@@ -149,7 +219,10 @@ def main(argv):
     wiki_pages = collect_wiki_pages(wiki_root)
 
     manifest = build_manifest(available, code_tools, wiki_pages)
-    write_outputs(manifest, args.output_dir, args.manifest, args.apply)
+    ok = write_outputs(manifest, args.output_dir, args.manifest, args.apply)
+    if not ok:
+        sys.exit(1)
+    return 0
 
 
 if __name__ == "__main__":

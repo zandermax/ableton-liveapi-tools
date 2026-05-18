@@ -787,7 +787,7 @@
   },
   {
     "defined_in": "ALiveMCP_Remote/tools/mixing/mixing_master_devices.py",
-    "docstring": "Set a master track device parameter by name.\n\nFor quantized parameters, pass a string matching one of the value_items\n(e.g. \"4:1\"). For continuous parameters, pass a number \u2014 it will be\nclamped to the parameter's min/max range.\nMatches the first parameter whose name equals param_name.\n\nSee Also:\n    Wiki: docs/wiki/tools/set_master_device_param_by_name.md\n\nArgs:\n    TODO: describe parameters.\n\nReturns:\n    TODO: describe return value.\n\nRaises:\n    TODO: exceptions raised.",
+    "docstring": "Set a master track device parameter by name.\n\nFor quantized parameters, pass a string matching one of the value_items\n(e.g. \"4:1\"). For continuous parameters, pass a number — it will be\nclamped to the parameter's min/max range.\nMatches the first parameter whose name equals param_name.\n\nSee Also:\n    Wiki: docs/wiki/tools/set_master_device_param_by_name.md\n\nArgs:\n    TODO: describe parameters.\n\nReturns:\n    TODO: describe return value.\n\nRaises:\n    TODO: exceptions raised.",
     "name": "set_master_device_param_by_name",
     "wiki_frontmatter": null
   },
@@ -817,7 +817,7 @@
   },
   {
     "defined_in": "ALiveMCP_Remote/tools/tracks/tracks_devices.py",
-    "docstring": "Set a track device parameter by name.\n\nFor quantized parameters, pass a string matching one of the value_items\n(e.g. \"4:1\"). For continuous parameters, pass a number \u2014 it will be\nclamped to the parameter's min/max range.\nMatches the first parameter whose name equals param_name.\n\nSee Also:\n    Wiki: docs/wiki/tools/set_track_device_param_by_name.md\n\nArgs:\n    TODO: describe parameters.\n\nReturns:\n    TODO: describe return value.\n\nRaises:\n    TODO: exceptions raised.",
+    "docstring": "Set a track device parameter by name.\n\nFor quantized parameters, pass a string matching one of the value_items\n(e.g. \"4:1\"). For continuous parameters, pass a number — it will be\nclamped to the parameter's min/max range.\nMatches the first parameter whose name equals param_name.\n\nSee Also:\n    Wiki: docs/wiki/tools/set_track_device_param_by_name.md\n\nArgs:\n    TODO: describe parameters.\n\nReturns:\n    TODO: describe return value.\n\nRaises:\n    TODO: exceptions raised.",
     "name": "set_track_device_param_by_name",
     "wiki_frontmatter": null
   },
