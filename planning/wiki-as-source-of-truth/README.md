@@ -19,3 +19,18 @@ Files
 - 13-runbook.md
 
 Each file is commit-sized and represents the steps needed to implement wiki-as-source-of-truth tooling.
+
+Status
+- 01-generate-from-wiki.md — Completed (2026-05-18): generator implemented, tests added, `--check`/`--apply` behavior verified and committed.
+- 02-migrate-wiki-frontmatter.md — Not started
+- 03-validate-wiki-parity.md — Not started
+- 04-docstring-checker.md — Not started
+- 05-template-updates.md — Not started
+- 06-phase0-inventory.md — Not started
+- 07-phase1-authoring.md — Not started
+- 08-phase2-migration.md — Not started
+- 09-phase3-generator.md — Not started
+- 10-phase4-parity.md — Not started
+- 11-phase5-makefile.md — Not started
+- 12-phase6-rollout.md — Not started
+- 13-runbook.md — Not started
