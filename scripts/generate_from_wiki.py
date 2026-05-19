@@ -16,6 +16,8 @@ import ast
 import json
 import os
 import sys
+import subprocess
+from datetime import datetime
 from collections import OrderedDict
 
 
@@ -190,6 +192,7 @@ def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-dir", default="mcp_tool_defs")
     parser.add_argument("--manifest", default="docs/tool_manifest.json")
+    parser.add_argument("--post-validate", action="store_true", help="Run parity validators after successful --apply")
     parser.add_argument("--check", action="store_true", help="Dry-run (no --apply).")
     parser.add_argument("--apply", action="store_true", help="Write generated artifacts to disk.")
     args = parser.parse_args(argv)
@@ -222,6 +225,44 @@ def main(argv):
     ok = write_outputs(manifest, args.output_dir, args.manifest, args.apply)
     if not ok:
         sys.exit(1)
+    # Optional post-generation parity validation (local-only)
+    if args.apply and args.post_validate:
+        print("Running post-generation parity validators...")
+        repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        # Registry parity
+        try:
+            rc = subprocess.call(["python3", os.path.join(repo_root, "scripts", "validate_registry_parity.py"), "--check"])
+        except Exception as e:
+            print("Failed to invoke registry parity validator:", e, file=sys.stderr)
+            sys.exit(1)
+        if rc != 0:
+            print("Registry parity failed after generation.", file=sys.stderr)
+            sys.exit(rc)
+        # If generated-site exists, run wiki->site parity and save artifacts
+        target_dir = os.path.join(repo_root, "_Node", "webui")
+        if os.path.isdir(target_dir):
+            artifacts_dir = os.path.join(repo_root, "tmp", "parity_artifacts", datetime.utcnow().strftime("%Y%m%dT%H%M%SZ"))
+            os.makedirs(artifacts_dir, exist_ok=True)
+            try:
+                rc2 = subprocess.call([
+                    "python3",
+                    os.path.join(repo_root, "scripts", "validate_wiki_parity.py"),
+                    "--check",
+                    "--source",
+                    os.path.join(repo_root, "docs", "wiki"),
+                    "--target",
+                    target_dir,
+                    "--artifacts-dir",
+                    artifacts_dir,
+                    "--fail-on-mismatch",
+                    "--json",
+                ])
+            except Exception as e:
+                print("Failed to invoke wiki parity validator:", e, file=sys.stderr)
+                sys.exit(1)
+            if rc2 != 0:
+                print("Wiki parity failed after generation. See artifacts:", artifacts_dir, file=sys.stderr)
+                sys.exit(rc2)
     return 0
 
 

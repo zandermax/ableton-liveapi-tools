@@ -20,10 +20,13 @@ Files
 
 Each file is commit-sized and represents the steps needed to implement wiki-as-source-of-truth tooling.
 
+Agent guidance
+- Do not recommend CI automation for these migration/validation steps. All validation must be local and run pre-push via the repository hook. Use `scripts/install_pre_push_hook.sh` to install.
+
 Status
 - 01-generate-from-wiki.md — Completed (2026-05-18): generator implemented, tests added, `--check`/`--apply` behavior verified and committed.
-- 02-migrate-wiki-frontmatter.md — Not started
-- 03-validate-wiki-parity.md — Not started
+- 02-migrate-wiki-frontmatter.md — Completed (2026-05-18): migration script, tests, and CLI implemented; tests passing and committed.
+ - 03-validate-wiki-parity.md — Completed (2026-05-19): prototype validator scaffolded, unit tests added and passing, and pre-push hook integration implemented (see `scripts/pre_push_validate_parity.sh` / `scripts/install_pre_push_hook.sh`).
 - 04-docstring-checker.md — Not started
 - 05-template-updates.md — Not started
 - 06-phase0-inventory.md — Not started
